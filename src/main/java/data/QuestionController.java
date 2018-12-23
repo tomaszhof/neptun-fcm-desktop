@@ -27,7 +27,7 @@ public class QuestionController {
 
     //zaciaga baze z serwera
     public void importQA(){
-        Set<String> ids = DataController.getAllQueId();
+        Set<String> ids = DataController.getAllQueId(); //pobiera wszystkie
         
         for(String tmp : ids){
             System.out.println("ImpoerQA " + tmp);

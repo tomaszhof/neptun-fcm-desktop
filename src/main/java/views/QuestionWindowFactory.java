@@ -38,24 +38,40 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     public void createForCode(String questionCode){
+        int licznik = 2;
         //ustawianie pytania
+        AbstractButton checkBox;
         questionCode = questionCode.replace("\uFEFF", ""); //usuwa spacje tak na wszelki wypadek
         String question = DataController.getQuestion(questionCode); //pytanie
         questionText.setText(question); //ustawia pole tekstowe na pytanie
-        ButtonGroup group = new ButtonGroup(); //grupa Radiobuttons
-/*
-        JCheckBox rb2 = new JCheckBox("rabbit2");
-        JCheckBox rb3 = new JCheckBox("rabbi3");
-        JCheckBox rb1 = new JCheckBox("rabbit1");
-        group.add(rb1);
-        group.add(rb2);
-        group.add(rb3);
-        add(rb1);
-        add(rb2);
-        add(rb3);
-*/
-        AbstractButton checkBox;
 
+        String anwerCodes = DataController.getQueAnsCodes(questionCode); //pobiera kody odpowiedzi
+        anwerCodes = anwerCodes.replace("\"", "");
+        String[] groupedAnswerCodes = anwerCodes.split(";"); //grupuje kody odpowiedzi
+
+        //grupowanie odpowiedzi, tak żeby można było udzielić tylko jednej odpowiedzi dla jednej grupy
+        ArrayList<ButtonGroup> Buttgroups = new ArrayList<>(); //tablica grup
+        for(String answCode : groupedAnswerCodes){
+            ButtonGroup group = new ButtonGroup(); //grupa buttonow
+            Map<String, String>  answers = getAnswers2(answCode);
+
+            for(Map.Entry<String, String> entry : answers.entrySet()) {
+                licznik++;
+                setLayout(new GridLayout(licznik,1));
+
+                String ansCode = entry.getKey();
+                String answer = entry.getValue();
+                System.out.println(ansCode+":"+answer);
+                checkBox = new JCheckBox(ansCode+":"+answer);
+                group.add(checkBox);
+                add(checkBox);
+                revalidate();
+                repaint();
+            }
+            Buttgroups.add(group);
+        }
+
+/*
         //wydobywanie odpowiedzi:
         Map<String, String>  answers = getAnswers(questionCode);
         setLayout(new GridLayout(answers.size()+1,1));
@@ -69,12 +85,13 @@ public class QuestionWindowFactory extends JFrame {
             revalidate();
             repaint();
         }
+        */
     }
 
     private Map<String, String> getAnswers(String questionCode){
         Map<String, String>  answers = new HashMap<String, String>(); //mapa zawierajaca kodOdpowiedz:Odpowiedz
         String answerCodes = DataController.getQueAnsCodes(questionCode);
-        System.out.println(answerCodes);
+        //System.out.println(answerCodes);
 
         Pattern pattern; //pattern do regexu wykrywającego odpoweidzi do pytania
         if(questionCode.contains("PQ")){
@@ -91,10 +108,32 @@ public class QuestionWindowFactory extends JFrame {
         while (m.find()) {
             String key = m.group();
             String answer = DataController.getAnswer(m.group());
+            answer = answer.replace("\"", ""); //wyrzuca " z odpowiedzi
             System.out.println(key + ":" + answer);
             answers.put(key, answer);
         }
         return answers;
     }
+
+    private Map<String, String> getAnswers2(String anwersCodes){
+        Map<String, String>  answers = new HashMap<String, String>(); //mapa zawierajaca kodOdpowiedz:Odpowiedz
+
+        Pattern pattern; //pattern do regexu wykrywającego odpoweidzi do pytania
+        pattern = Pattern.compile("(A\\d+)|(PA\\d+)");
+
+        Matcher m = pattern.matcher(anwersCodes);
+
+        //znajduje wszystkie dopasowania
+        while (m.find()) {
+            String key = m.group();
+            String answer = DataController.getAnswer(m.group());
+            answer = answer.replace("\"", ""); //wyrzuca " z odpowiedzi
+            System.out.println(key + ":" + answer);
+            answers.put(key, answer);
+        }
+        return answers;
+    }
+
+
 }
 
