@@ -5,6 +5,8 @@ import data.QuestionController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +20,8 @@ public class QuestionWindowFactory extends JFrame {
     private ArrayList<AbstractButton> buttonList = new ArrayList<AbstractButton>();
     Dimension screenSize;
 
-    public QuestionWindowFactory(QuestionController qc){
+    public QuestionWindowFactory(){
         super("Test");
-        this.qc = qc;
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,15 +39,17 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     public void createForCode(String questionCode){
+        //musi sie to okno czyscic przy kazdym wywolaniu tej metody
+        ArrayList<String> answeredQuestions = new ArrayList<>(); //przechowuje kody udzielonych odpowiedzi
+
         int licznik = 2;
         //ustawianie pytania
         AbstractButton checkBox;
-        questionCode = questionCode.replace("\uFEFF", ""); //usuwa spacje tak na wszelki wypadek
         String question = DataController.getQuestion(questionCode); //pytanie
         questionText.setText(question); //ustawia pole tekstowe na pytanie
 
         String anwerCodes = DataController.getQueAnsCodes(questionCode); //pobiera kody odpowiedzi
-        anwerCodes = anwerCodes.replace("\"", "");
+        anwerCodes = anwerCodes.replace("\"", ""); //usuwa ' " '
         String[] groupedAnswerCodes = anwerCodes.split(";"); //grupuje kody odpowiedzi
 
         //grupowanie odpowiedzi, tak żeby można było udzielić tylko jednej odpowiedzi dla jednej grupy
@@ -66,12 +69,32 @@ public class QuestionWindowFactory extends JFrame {
                 if(isSingleChoice(answCode)) //jezeli pytanie jest jednokrotnego wyboru, to dodaje do grupy
                     group.add(checkBox); //dodaje przycisk do grupy przyciskow, czyli tam gdzie mozna go kliknac tylko raz
 
+                //dodaje listener do przycisku
+                checkBox.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                            answeredQuestions.add(ansCode); //dodaje kod odpowiedzi
+                            displayAll(answeredQuestions);
+                        } else
+                            {    //checkbox has been deselected
+                            answeredQuestions.remove(ansCode); //usuwa kod odpowiedzi
+                            displayAll(answeredQuestions);
+                        }
+                    }
+                });
+
                 add(checkBox); //dodaje przycisk do ekranu
-                revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
-                repaint();  //to samo co powyzej
             }
-            Buttgroups.add(group);
+            Buttgroups.add(group); //dodaje grupę przyciskow do tablicy przyciskow
         }
+
+        JButton next = new JButton("Dalej");
+        next.setBackground(Color.cyan);
+        add(next); //dodaje do layoutu
+
+        revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
+        repaint();  //to samo co powyzej
     }
 
     private Map<String, String> getAnswers(String questionCode){
@@ -124,5 +147,10 @@ public class QuestionWindowFactory extends JFrame {
         return answerCodes.matches("((A\\d+|PA\\d+)\\|)+(A\\d+|PA\\d+)");
     }
 
+    private void displayAll(ArrayList<String> answeredQuestions){
+        for(String tmp : answeredQuestions)
+            System.out.println(tmp);
+        System.out.println("\n\n");
+    }
 }
 

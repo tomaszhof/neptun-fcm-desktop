@@ -8,11 +8,9 @@ import views.*;
 public class App {
     //komentarz tylko po to, żeby wprowadzić zmiany i sprawdzić czy jestem contributor'em
 	public static void main(String[] args) {
-		QuestionController qc = new QuestionController();
-		//qc.importQA();
-
-		QuestionWindowFactory questionWindowFactory = new QuestionWindowFactory(qc);
+		QuestionWindowFactory questionWindowFactory = new QuestionWindowFactory();
 		questionWindowFactory.createForCode("Q16");
+		questionWindowFactory.createForCode("Q15");
 
 		/*
 	      SwingUtilities.invokeLater(new Runnable() {
