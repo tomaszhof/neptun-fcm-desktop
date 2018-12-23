@@ -58,34 +58,20 @@ public class QuestionWindowFactory extends JFrame {
             for(Map.Entry<String, String> entry : answers.entrySet()) {
                 licznik++;
                 setLayout(new GridLayout(licznik,1));
-
                 String ansCode = entry.getKey();
                 String answer = entry.getValue();
                 System.out.println(ansCode+":"+answer);
-                checkBox = new JCheckBox(ansCode+":"+answer);
-                group.add(checkBox);
-                add(checkBox);
-                revalidate();
-                repaint();
+                checkBox = new JCheckBox(ansCode+":"+answer); //dodaje tekst
+
+                if(isSingleChoice(answCode)) //jezeli pytanie jest jednokrotnego wyboru, to dodaje do grupy
+                    group.add(checkBox); //dodaje przycisk do grupy przyciskow, czyli tam gdzie mozna go kliknac tylko raz
+
+                add(checkBox); //dodaje przycisk do ekranu
+                revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
+                repaint();  //to samo co powyzej
             }
             Buttgroups.add(group);
         }
-
-/*
-        //wydobywanie odpowiedzi:
-        Map<String, String>  answers = getAnswers(questionCode);
-        setLayout(new GridLayout(answers.size()+1,1));
-
-        for(Map.Entry<String, String> entry : answers.entrySet()) {
-            String ansCode = entry.getKey();
-            String answer = entry.getValue();
-            System.out.println(ansCode+":"+answer);
-            checkBox = new JCheckBox(ansCode+":"+answer);
-            add(checkBox);
-            revalidate();
-            repaint();
-        }
-        */
     }
 
     private Map<String, String> getAnswers(String questionCode){
@@ -134,6 +120,9 @@ public class QuestionWindowFactory extends JFrame {
         return answers;
     }
 
+    private boolean isSingleChoice(String answerCodes){
+        return answerCodes.matches("((A\\d+|PA\\d+)\\|)+(A\\d+|PA\\d+)");
+    }
 
 }
 
