@@ -6,4 +6,6 @@ bin/*
 .project
 *.project
 .classpath
+.idea
+/target
 
