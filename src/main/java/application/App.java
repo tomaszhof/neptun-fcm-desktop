@@ -10,6 +10,9 @@ public class App {
 	public static void main(String[] args) {
 		QuestionWindowFactory questionWindowFactory = new QuestionWindowFactory();
 		questionWindowFactory.createForCode("Q16");
+
+
+		questionWindowFactory.removeAllButtons();
 		questionWindowFactory.createForCode("Q15");
 
 		/*

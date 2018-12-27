@@ -5,6 +5,8 @@ import data.QuestionController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -56,7 +58,7 @@ public class QuestionWindowFactory extends JFrame {
         ArrayList<ButtonGroup> Buttgroups = new ArrayList<>(); //tablica grup
         for(String answCode : groupedAnswerCodes){
             ButtonGroup group = new ButtonGroup(); //grupa buttonow
-            Map<String, String>  answers = getAnswers2(answCode);
+            Map<String, String>  answers = getAnswers(answCode);
 
             for(Map.Entry<String, String> entry : answers.entrySet()) {
                 licznik++;
@@ -83,48 +85,34 @@ public class QuestionWindowFactory extends JFrame {
                         }
                     }
                 });
-
+                buttonList.add(checkBox);
                 add(checkBox); //dodaje przycisk do ekranu
             }
             Buttgroups.add(group); //dodaje grupę przyciskow do tablicy przyciskow
         }
 
-        JButton next = new JButton("Dalej");
-        next.setBackground(Color.cyan);
-        add(next); //dodaje do layoutu
+        addNextBtn();
 
         revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
         repaint();  //to samo co powyzej
     }
 
-    private Map<String, String> getAnswers(String questionCode){
-        Map<String, String>  answers = new HashMap<String, String>(); //mapa zawierajaca kodOdpowiedz:Odpowiedz
-        String answerCodes = DataController.getQueAnsCodes(questionCode);
-        //System.out.println(answerCodes);
+    private void addNextBtn(){
+        JButton next = new JButton("Dalej");
+        next.setBackground(Color.cyan);
+        next.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Pressed");
+            }
+        });
 
-        Pattern pattern; //pattern do regexu wykrywającego odpoweidzi do pytania
-        if(questionCode.contains("PQ")){
-            System.out.println("PQ");
-            pattern = Pattern.compile("PA\\d+");
-        }
-        else{
-            System.out.println("Q");
-            pattern = Pattern.compile("A\\d+");
-        }
-        Matcher m = pattern.matcher(answerCodes);
 
-        //znajduje wszystkie dopasowania
-        while (m.find()) {
-            String key = m.group();
-            String answer = DataController.getAnswer(m.group());
-            answer = answer.replace("\"", ""); //wyrzuca " z odpowiedzi
-            System.out.println(key + ":" + answer);
-            answers.put(key, answer);
-        }
-        return answers;
+        buttonList.add(next); //dla latwiejszego usuwania
+        add(next); //dodaje do layoutu
     }
 
-    private Map<String, String> getAnswers2(String anwersCodes){
+    private Map<String, String> getAnswers(String anwersCodes){
         Map<String, String>  answers = new HashMap<String, String>(); //mapa zawierajaca kodOdpowiedz:Odpowiedz
 
         Pattern pattern; //pattern do regexu wykrywającego odpoweidzi do pytania
@@ -151,6 +139,12 @@ public class QuestionWindowFactory extends JFrame {
         for(String tmp : answeredQuestions)
             System.out.println(tmp);
         System.out.println("\n\n");
+    }
+
+    //to dziala, dodac ususwanie przycisku next ;)
+    public void removeAllButtons(){
+        for(AbstractButton button : buttonList)
+            remove(button);
     }
 }
 
