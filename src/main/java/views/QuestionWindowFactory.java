@@ -16,6 +16,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class QuestionWindowFactory extends JFrame {
+    ImageIcon loading = new ImageIcon("src/main/resources/ajax-loader.gif"); //loading panel
+    JLabel loadingPanel = new JLabel("Ładowanie... ", loading, JLabel.CENTER); //wlasciwy loading panel
+
     QuestionController qc;
     private JLabel questionText;
     private JPanel MainPanel;
@@ -41,6 +44,7 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     public void createForCode(String questionCode){
+        loadingPanelOn();
         //musi sie to okno czyscic przy kazdym wywolaniu tej metody
         ArrayList<String> answeredQuestions = new ArrayList<>(); //przechowuje kody udzielonych odpowiedzi
 
@@ -93,6 +97,7 @@ public class QuestionWindowFactory extends JFrame {
 
         addNextBtn();
 
+        loadingPanelOff();
         revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
         repaint();  //to samo co powyzej
     }
@@ -145,6 +150,13 @@ public class QuestionWindowFactory extends JFrame {
     public void removeAllButtons(){
         for(AbstractButton button : buttonList)
             remove(button);
+    }
+
+    private void loadingPanelOn() {
+        add(loadingPanel);
+    }
+    private void loadingPanelOff() {
+        remove(loadingPanel);
     }
 }
 

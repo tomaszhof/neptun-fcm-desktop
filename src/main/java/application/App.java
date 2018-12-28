@@ -12,8 +12,6 @@ public class App {
 		questionWindowFactory.createForCode("Q16");
 
 
-		questionWindowFactory.removeAllButtons();
-		questionWindowFactory.createForCode("Q15");
 
 		/*
 	      SwingUtilities.invokeLater(new Runnable() {
