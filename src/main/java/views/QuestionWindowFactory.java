@@ -1,6 +1,7 @@
 package views;
 
 import controllers.DataController;
+import data.AnsweredQuestions;
 import data.QuestionController;
 
 import javax.swing.*;
@@ -16,106 +17,79 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class QuestionWindowFactory extends JFrame {
-    ImageIcon loading = new ImageIcon("src/main/resources/ajax-loader.gif"); //loading panel
-    JLabel loadingPanel = new JLabel("Ładowanie... ", loading, JLabel.CENTER); //wlasciwy loading panel
+    JFrame mainPanel = new JFrame();
+    JFrame load = new JFrame();
 
-    QuestionController qc;
+    JButton nextBtn;
+    String questionCode;
     private JLabel questionText;
-    private JPanel MainPanel;
     private ArrayList<AbstractButton> buttonList = new ArrayList<AbstractButton>();
     Dimension screenSize;
+
+
+    int licznik;
 
     public QuestionWindowFactory(){
         super("Test");
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(1,1));
-        setVisible(true);
-        setSize(screenSize.width/2, screenSize.height/2); //przyjmuje polowe wielkosci
-        setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
+        mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainPanel.setLayout(new GridLayout(1,1));
+        mainPanel.setVisible(true);
+        mainPanel.setSize(screenSize.width/2, screenSize.height/2); //przyjmuje polowe wielkosci
+        mainPanel.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
 
 
         questionText = new JLabel("Pytanie :)");
         questionText.setVerticalAlignment(SwingConstants.TOP);
         questionText.setHorizontalAlignment(SwingConstants.CENTER);
 
-        add(questionText);
+        mainPanel.add(questionText);
+        load = setLoadingFrame();
     }
 
     public void createForCode(String questionCode){
+        load.setVisible(true);
+
+        licznik = 2;
+
+        this.questionCode = questionCode;
         loadingPanelOn();
         //musi sie to okno czyscic przy kazdym wywolaniu tej metody
-        ArrayList<String> answeredQuestions = new ArrayList<>(); //przechowuje kody udzielonych odpowiedzi
 
-        int licznik = 2;
         //ustawianie pytania
-        AbstractButton checkBox;
         String question = DataController.getQuestion(questionCode); //pytanie
         questionText.setText(question); //ustawia pole tekstowe na pytanie
 
-        String anwerCodes = DataController.getQueAnsCodes(questionCode); //pobiera kody odpowiedzi
-        anwerCodes = anwerCodes.replace("\"", ""); //usuwa ' " '
-        String[] groupedAnswerCodes = anwerCodes.split(";"); //grupuje kody odpowiedzi
+        mainPanel.revalidate();
+        mainPanel.repaint();
 
-        //grupowanie odpowiedzi, tak żeby można było udzielić tylko jednej odpowiedzi dla jednej grupy
-        ArrayList<ButtonGroup> Buttgroups = new ArrayList<>(); //tablica grup
-        for(String answCode : groupedAnswerCodes){
-            ButtonGroup group = new ButtonGroup(); //grupa buttonow
-            Map<String, String>  answers = getAnswers(answCode);
-
-            for(Map.Entry<String, String> entry : answers.entrySet()) {
-                licznik++;
-                setLayout(new GridLayout(licznik,1));
-                String ansCode = entry.getKey();
-                String answer = entry.getValue();
-                System.out.println(ansCode+":"+answer);
-                checkBox = new JCheckBox(ansCode+":"+answer); //dodaje tekst
-
-                if(isSingleChoice(answCode)) //jezeli pytanie jest jednokrotnego wyboru, to dodaje do grupy
-                    group.add(checkBox); //dodaje przycisk do grupy przyciskow, czyli tam gdzie mozna go kliknac tylko raz
-
-                //dodaje listener do przycisku
-                checkBox.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-//                            answeredQuestions.add(ansCode); //dodaje kod odpowiedzi
-//                            displayAll(answeredQuestions);
-                        } else
-                            {    //checkbox has been deselected
-//                            answeredQuestions.remove(ansCode); //usuwa kod odpowiedzi
-//                            displayAll(answeredQuestions);
-                        }
-                    }
-                });
-                buttonList.add(checkBox);
-                add(checkBox); //dodaje przycisk do ekranu
-            }
-            Buttgroups.add(group); //dodaje grupę przyciskow do tablicy przyciskow
-        }
+        showAnswers();
 
         addNextBtn();
-
         loadingPanelOff();
-        revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
-        repaint();  //to samo co powyzej
+
+        load.setVisible(false);
+    }
+
+    public JButton getNextBtn(){
+        return this.nextBtn;
     }
 
     private void addNextBtn(){
-        JButton next = new JButton("Dalej");
-        next.setBackground(Color.cyan);
-        next.addActionListener(new ActionListener() {
+        nextBtn = new JButton("Dalej");
+        nextBtn.setBackground(Color.cyan);
+        nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Pressed");
+
             }
         });
 
-
-        buttonList.add(next); //dla latwiejszego usuwania
-        add(next); //dodaje do layoutu
+        buttonList.add(nextBtn); //dla latwiejszego usuwania
+        mainPanel.add(nextBtn); //dodaje do layoutu
     }
+
 
     private Map<String, String> getAnswers(String anwersCodes){
         Map<String, String>  answers = new HashMap<String, String>(); //mapa zawierajaca kodOdpowiedz:Odpowiedz
@@ -140,23 +114,89 @@ public class QuestionWindowFactory extends JFrame {
         return answerCodes.matches("((A\\d+|PA\\d+)\\|)+(A\\d+|PA\\d+)");
     }
 
-    private void displayAll(ArrayList<String> answeredQuestions){
-        for(String tmp : answeredQuestions)
-            System.out.println(tmp);
-        System.out.println("\n\n");
-    }
-
-    //to dziala, dodac ususwanie przycisku next ;)
+    //to dziala, dodac ususwanie przycisku nextBtn ;)
     public void removeAllButtons(){
         for(AbstractButton button : buttonList)
-            remove(button);
+            mainPanel.remove(button);
+        buttonList.clear();
     }
 
     private void loadingPanelOn() {
-        add(loadingPanel);
+        removeAllButtons();
+        mainPanel.setLayout(new GridLayout(licznik,1));
+        mainPanel.revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
+        mainPanel.repaint();  //to samo co powyzej
     }
+
     private void loadingPanelOff() {
-        remove(loadingPanel);
+        mainPanel.setLayout(new GridLayout(licznik,1));
+        mainPanel.revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
+        mainPanel.repaint();  //to samo co powyzej
+    }
+
+    private void showAnswers(){
+        AbstractButton checkBox;
+        String anwerCodes = DataController.getQueAnsCodes(questionCode); //pobiera kody odpowiedzi
+        anwerCodes = anwerCodes.replace("\"", ""); //usuwa ' " '
+        ArrayList<String> answeredQuestions  = new ArrayList<>();; //przechowuje kody udzielonych odpowiedzi
+
+        String[] groupedAnswerCodes = anwerCodes.split(";"); //grupuje kody odpowiedzi
+
+        //grupowanie odpowiedzi, tak żeby można było udzielić tylko jednej odpowiedzi dla jednej grupy
+        ArrayList<ButtonGroup> Buttgroups = new ArrayList<>(); //tablica grup
+        for(String answCode : groupedAnswerCodes){
+            ButtonGroup group = new ButtonGroup(); //grupa buttonow
+            Map<String, String>  answers = getAnswers(answCode);
+
+            for(Map.Entry<String, String> entry : answers.entrySet()) {
+                licznik++;
+                String ansCode = entry.getKey();
+                String answer = entry.getValue();
+                //System.out.println(ansCode+":"+answer);
+                checkBox = new JCheckBox(answer); //dodaje tekst
+
+                if(isSingleChoice(answCode)) //jezeli pytanie jest jednokrotnego wyboru, to dodaje do grupy
+                    group.add(checkBox); //dodaje przycisk do grupy przyciskow, czyli tam gdzie mozna go kliknac tylko raz
+
+                //dodaje listener do checboxa
+                checkBox.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                            System.out.println(questionCode + " " + ansCode);
+                            answeredQuestions.add(ansCode);
+                            AnsweredQuestions.addAnswer(questionCode, answeredQuestions);
+
+                        }
+                        else
+                        {    //checkbox has been deselected
+                            answeredQuestions.remove(ansCode);
+                            AnsweredQuestions.addAnswer(questionCode, answeredQuestions);
+                        }
+                    }
+                });
+                buttonList.add(checkBox);
+                mainPanel.add(checkBox); //dodaje przycisk do ekranu
+            }
+            Buttgroups.add(group); //dodaje grupę przyciskow do tablicy przyciskow
+        }
+    }
+
+    private JFrame setLoadingFrame(){
+        ImageIcon loading = new ImageIcon("src/main/resources/ajax-loader.gif"); //loading panel
+        JLabel loadingPanel = new JLabel("Ładowanie... ", loading, JLabel.CENTER); //wlasciwy loading panel
+
+        JFrame secPan = new JFrame();
+        secPan = new JFrame();
+        secPan.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        secPan.setLayout(new GridLayout(1,1));
+        secPan.setVisible(true);
+        secPan.setSize(screenSize.width/4, screenSize.height/4); //przyjmuje polowe wielkosci
+        secPan.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
+        secPan.add(loadingPanel);
+        secPan.setVisible(true);
+
+        return secPan;
     }
 }
 
