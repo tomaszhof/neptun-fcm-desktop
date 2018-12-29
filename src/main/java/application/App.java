@@ -1,6 +1,7 @@
 package application;
 
 import controllers.DataController;
+import controllers.NeptunQAController;
 import data.Question;
 import data.QuestionController;
 import views.*;
@@ -8,6 +9,15 @@ import views.*;
 public class App {
     //komentarz tylko po to, żeby wprowadzić zmiany i sprawdzić czy jestem contributor'em
 	public static void main(String[] args) {
+		NeptunQAController qaController = NeptunQAController.get();
+		String startQuestionCodePhase1 = qaController.getNextQuestionPhase1("_", null);
+		String sampleNextQuestionCodePhase1 = qaController.getNextQuestionPhase1("PQ1", "PA7");
+		String sampleLastQuestionCodePhase1 = qaController.getNextQuestionPhase1("Q17", "A87");
+		
+		String startQuestionCodePhase2 = qaController.getNextQuestionPhase2("_", null);
+		String sampleNextQuestionCodePhase2 = qaController.getNextQuestionPhase2("Q25", "A149");
+		String sampleLastQuestionCodePhase2 = qaController.getNextQuestionPhase2("Q37", "A204");
+		
 		QuestionWindowFactory questionWindowFactory = new QuestionWindowFactory();
 		questionWindowFactory.createForCode("Q16");
 

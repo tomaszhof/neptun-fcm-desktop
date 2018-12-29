@@ -12,10 +12,11 @@ import java.net.URLConnection;
 import java.util.Set;
 
 public class DataController {
-    private static final String importer = "https://neptun-fcm.herokuapp.com/importer";
+//    private static final String importer = "https://neptun-fcm.herokuapp.com/importer";
     private static final String getQuestionsUrl = "https://neptun-fcm.herokuapp.com/api/questions";
     private static final String getQueAnsCodeUrl = "https://neptun-fcm.herokuapp.com/api/question/";
     private static final String getAnswersUrl = "https://neptun-fcm.herokuapp.com/api/answers";
+    private static final String getRulesUrl = "https://neptun-fcm.herokuapp.com/api/rules";
 
 
     public static String getQuestion(String questionCode){
@@ -113,5 +114,26 @@ public class DataController {
             e.printStackTrace();
         }
         return queAnsCodes;
+    }
+    
+    public static String getRulesOfQuestions() {
+    	
+    	try {
+            //połączenie z URL'em do pobierania reguł
+            URL url = new URL(getRulesUrl);
+            URLConnection request = url.openConnection();
+            request.connect();
+			java.util.Scanner scanner = new java.util.Scanner((InputStream) request.getContent());
+			java.util.Scanner s = scanner.useDelimiter("\\A");
+            String result =  s.hasNext() ? s.next() : "NO RULES FOUND!";
+            s.close();
+            scanner.close();
+            return result;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    	
+    	return null;
     }
 }

@@ -80,12 +80,12 @@ public class QuestionWindowFactory extends JFrame {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
                         if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                            answeredQuestions.add(ansCode); //dodaje kod odpowiedzi
-                            displayAll(answeredQuestions);
+//                            answeredQuestions.add(ansCode); //dodaje kod odpowiedzi
+//                            displayAll(answeredQuestions);
                         } else
                             {    //checkbox has been deselected
-                            answeredQuestions.remove(ansCode); //usuwa kod odpowiedzi
-                            displayAll(answeredQuestions);
+//                            answeredQuestions.remove(ansCode); //usuwa kod odpowiedzi
+//                            displayAll(answeredQuestions);
                         }
                     }
                 });
