@@ -1,6 +1,7 @@
 package controllers;
 
 import data.AnsweredQuestions;
+import data.QuestionController;
 import models.ButtonCircleModel;
 import views.QuestionWindowFactory;
 
@@ -22,6 +23,9 @@ public class QueWinFacController {
         phaseNum = 1;
         queCode = "_";
         answCode = null;
+//        phaseNum = 2;
+//        queCode = "Q35";
+//        answCode = "A198";
         updateQueCode();
         showWindow();
 
@@ -34,27 +38,51 @@ public class QueWinFacController {
         questionWindowFactory.getNextBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 nextQuestion();
             }
         });
     }
 
-    private void updateQueCode(){
+    private boolean updateQueCode(){
         if(phaseNum == 1) {
             queCode = qaController.getNextQuestionPhase1(queCode, answCode);
+            return true;
         }
-        if (phaseNum == 2){
+        else if (phaseNum == 2){
             queCode = qaController.getNextQuestionPhase2(queCode, answCode);
+
+            if (queCode.equals("_")){
+                System.out.println("Finish");
+                AnsweredQuestions.printAll();
+                return false;
+            }
+            return true;
         }
+
+        if (queCode.equals("P2")){
+            runTest();
+            phaseNum = 2;
+            queCode = "_";
+            updateQueCode();
+            return true;
+        }
+        return true;
     }
 
     private void nextQuestion(){
         answCode = AnsweredQuestions.getQuestionAnswer(queCode);
         System.out.println("Ans code: " + answCode);
-        updateQueCode();
-        System.out.println("Next que code: " + queCode);
-        //queCode = "Q16";
-        showWindow();
+        if (updateQueCode()){
+            showWindow();
+        }
+        else{
+            //koniec dzialania progrmau
+        }
+
+
+    }
+
+    private void runTest(){
+
     }
 }

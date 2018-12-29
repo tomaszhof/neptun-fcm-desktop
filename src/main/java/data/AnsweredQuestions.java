@@ -46,24 +46,23 @@ public class AnsweredQuestions {
 
     public static void printAll(){
         for(AQ data : answeredQuestions)
-            System.out.println(data.getQuestion() + " " + data.getFirstAnswer());
+            System.out.println(data.getQuestion() + " " + data.answers.toString());
     }
 }
 
 class AQ{
     String question;
+    public ArrayList<String> answers = new ArrayList<>();
 
     public void setAnswers(ArrayList<String> answers) {
         this.answers = answers;
     }
 
-    ArrayList<String> answers = new ArrayList<>();
 
     AQ(String question, ArrayList<String> answers){
         this.question = question;
         this.answers = answers;
     }
-
 
     public String getFirstAnswer(){
         return answers.get(0);
@@ -72,6 +71,8 @@ class AQ{
     public String getQuestion() {
         return question;
     }
+
+
 }
 
 

@@ -67,8 +67,8 @@ public class QuestionWindowFactory extends JFrame {
         showAnswers();
 
         addNextBtn();
-        loadingPanelOff();
 
+        loadingPanelOff();
         load.setVisible(false);
     }
 
