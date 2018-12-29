@@ -1,8 +1,8 @@
 package controllers;
 
 import data.AnsweredQuestions;
-import data.QuestionController;
 import models.ButtonCircleModel;
+import views.ButtonCircleView;
 import views.QuestionWindowFactory;
 
 import javax.swing.*;
@@ -23,9 +23,9 @@ public class QueWinFacController {
         phaseNum = 1;
         queCode = "_";
         answCode = null;
-//        phaseNum = 2;
-//        queCode = "Q35";
-//        answCode = "A198";
+        phaseNum = 1;
+        queCode = "Q15";
+        answCode = "A56";
         updateQueCode();
         showWindow();
 
@@ -43,10 +43,9 @@ public class QueWinFacController {
         });
     }
 
-    private boolean updateQueCode(){
+    private void updateQueCode(){
         if(phaseNum == 1) {
             queCode = qaController.getNextQuestionPhase1(queCode, answCode);
-            return true;
         }
         else if (phaseNum == 2){
             queCode = qaController.getNextQuestionPhase2(queCode, answCode);
@@ -54,9 +53,8 @@ public class QueWinFacController {
             if (queCode.equals("_")){
                 System.out.println("Finish");
                 AnsweredQuestions.printAll();
-                return false;
+                //tu sie konczy
             }
-            return true;
         }
 
         if (queCode.equals("P2")){
@@ -64,25 +62,28 @@ public class QueWinFacController {
             phaseNum = 2;
             queCode = "_";
             updateQueCode();
-            return true;
         }
-        return true;
     }
 
     private void nextQuestion(){
         answCode = AnsweredQuestions.getQuestionAnswer(queCode);
+        updateQueCode();
         System.out.println("Ans code: " + answCode);
-        if (updateQueCode()){
-            showWindow();
-        }
-        else{
-            //koniec dzialania progrmau
-        }
-
-
+        showWindow();
     }
 
     private void runTest(){
-
+        //questionWindowFactory.hide();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				ButtonCircleModel buttonCircleModel = new ButtonCircleModel();
+				buttonCircleModel.generateRandomNodes(15);
+				ButtonCircleView buttonCircleView = new ButtonCircleView(buttonCircleModel.getNodeLabels());
+				ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView);
+				buttonCircleController.initController();
+				//MainView mainView = new MainView();
+			}
+		});
+		//questionWindowFactory.unhide();
     }
 }

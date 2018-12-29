@@ -198,5 +198,13 @@ public class QuestionWindowFactory extends JFrame {
 
         return secPan;
     }
+
+    public void hide(){
+        mainPanel.setVisible(false);
+    }
+
+    public void unhide(){
+        mainPanel.setVisible(true);
+    }
 }
 

@@ -25,18 +25,18 @@ public class App {
 
 		QueWinFacController queWinFacController = new QueWinFacController();
 
-		/*
-	      SwingUtilities.invokeLater(new Runnable() {
-			 public void run() {
-				 ButtonCircleModel buttonCircleModel = new ButtonCircleModel();
-				 buttonCircleModel.generateRandomNodes(15);
-				 ButtonCircleView buttonCircleView = new ButtonCircleView(buttonCircleModel.getNodeLabels());
-				 ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView);
-				 buttonCircleController.initController();
-				 //MainView mainView = new MainView();
-			 }
-	      });
-	      */
+//		SwingUtilities.invokeLater(new Runnable() {
+//			public void run() {
+//				ButtonCircleModel buttonCircleModel = new ButtonCircleModel();
+//				buttonCircleModel.generateRandomNodes(15);
+//				ButtonCircleView buttonCircleView = new ButtonCircleView(buttonCircleModel.getNodeLabels());
+//				ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView);
+//				buttonCircleController.initController();
+//				//MainView mainView = new MainView();
+//			}
+//		});
+
+
 	   }
 
 }
