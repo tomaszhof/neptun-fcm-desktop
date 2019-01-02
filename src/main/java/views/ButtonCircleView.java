@@ -14,6 +14,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import javax.swing.*;
 
 import components.RoundButton;
+import controllers.StatisticsController;
 
 public class ButtonCircleView extends JPanel {
    private static final int RADIUS = 200;
@@ -27,6 +28,9 @@ public class ButtonCircleView extends JPanel {
    private JFrame frame;
    private Timer timer;
    private JLabel label;
+
+   private int lastX = 0;
+   private int lastY = 0;
 
    public ButtonCircleView() {
 	   buttons = new ArrayList<RoundButton>();
@@ -89,8 +93,12 @@ public class ButtonCircleView extends JPanel {
       //przenies do controllera
       frame.addMouseMotionListener(new MouseMotionAdapter() {
     	  public void mouseMoved(MouseEvent e) {
-    		  
-    		  System.out.println("Mouse moved " + e.getX() + " " + e.getY());
+    	     StatisticsController.calcRealPath(e.getX(), e.getY(), lastX, lastY);
+
+    	     //System.out.println("Mouse moved " + e.getX() + " " + e.getY());
+
+    	     lastX = e.getX();
+    	     lastY = e.getY();
     	    }
       });
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

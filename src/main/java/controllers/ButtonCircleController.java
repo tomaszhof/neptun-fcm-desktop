@@ -40,6 +40,7 @@ public class ButtonCircleController {
 			RoundButton button = buttons.get(i);
 			ButtonModel buttonModel = new ButtonModel(button.getText(), button.getxCenter(), button.getyCenter());
 			buttonModelList.add(buttonModel);
+
 			//tutaj pomiar najkrotszej sciezki
 			StatisticsController.addNode(button.getText(), button.getxCenter(), button.getyCenter());
 			//pomiar koniec
@@ -67,11 +68,15 @@ public class ButtonCircleController {
 		if(id.equals(button.getText())) {
 			button.setBackground(Color.CYAN);
 			buttonCircleModel.setNextButtonId();
+			// pomiar realnej sciezki cz.1 - ustawianie aktualnego przycisku
+				StatisticsController.setActualNode(button.getText());
+			//
 			
 			String maxId = "" + (buttonCircleView.getButtons().size()-1);
 			if(maxId.equals(button.getText())) {
 				Timer timer = buttonCircleView.getTimer();
 				timer.stop();
+				StatisticsController.displayRealPaths();
 			}
 			else if(button.getText().equals("0")) {
 				buttonCircleModel.setStartTime(System.currentTimeMillis());
