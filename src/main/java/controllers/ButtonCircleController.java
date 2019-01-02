@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.Timer;
@@ -41,7 +40,12 @@ public class ButtonCircleController {
 			RoundButton button = buttons.get(i);
 			ButtonModel buttonModel = new ButtonModel(button.getText(), button.getxCenter(), button.getyCenter());
 			buttonModelList.add(buttonModel);
+			//tutaj pomiar najkrotszej sciezki
+			StatisticsController.addNode(button.getText(), button.getxCenter(), button.getyCenter());
+			//pomiar koniec
 		}
+		StatisticsController.calcShortestPaths(); // liczy dlugosci pomiedzy wszystkimi parami
+
 		buttonCircleModel.setNodes(buttonModelList);
 	}
 	
