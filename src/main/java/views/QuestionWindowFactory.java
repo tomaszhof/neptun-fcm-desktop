@@ -114,7 +114,6 @@ public class QuestionWindowFactory extends JFrame {
         return answerCodes.matches("((A\\d+|PA\\d+)\\|)+(A\\d+|PA\\d+)");
     }
 
-    //to dziala, dodac ususwanie przycisku nextBtn ;)
     public void removeAllButtons(){
         for(AbstractButton button : buttonList)
             mainPanel.remove(button);

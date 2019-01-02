@@ -12,12 +12,14 @@ import components.RoundButton;
 import models.ButtonCircleModel;
 import models.ButtonModel;
 import views.ButtonCircleView;
+import views.QuestionWindowFactory;
 
 public class ButtonCircleController {
 
 	private ButtonCircleModel buttonCircleModel;
 	private ButtonCircleView buttonCircleView;
-	
+	private QuestionWindowFactory QWF;
+
 	public ButtonCircleController() {
 		
 	}
@@ -25,6 +27,13 @@ public class ButtonCircleController {
 	public ButtonCircleController(ButtonCircleModel model, ButtonCircleView view) {
 		buttonCircleModel = model;
 		buttonCircleView = view;
+	}
+
+	public ButtonCircleController(ButtonCircleModel model, ButtonCircleView view, QuestionWindowFactory QWF) {
+		buttonCircleModel = model;
+		buttonCircleView = view;
+		this.QWF = QWF;
+		QWF.hide();
 	}
 
 	public void initController() {
@@ -76,16 +85,20 @@ public class ButtonCircleController {
 			if(maxId.equals(button.getText())) {
 				Timer timer = buttonCircleView.getTimer();
 				timer.stop();
-				StatisticsController.displayRealPaths();
+				StatisticsController.printAllStats();
+
+				//po kliknieciu na maxID ponownie pokazuje okno z pytaniami
+				QWF.unhide();
+				buttonCircleView.hideGui();
 			}
 			else if(button.getText().equals("0")) {
+				StatisticsController.setIsPEtest(true);
 				buttonCircleModel.setStartTime(System.currentTimeMillis());
 				Timer timer = buttonCircleView.getTimer();
 				timer.addActionListener(new ActionListener() {
 			        public void actionPerformed(ActionEvent e) {
 			        	long time = System.currentTimeMillis() - buttonCircleModel.getStartTime();
 			            buttonCircleView.setLabel(""+time);
-			            
 			        }
 			    });
 				timer.start();

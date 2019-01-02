@@ -93,7 +93,7 @@ public class ButtonCircleView extends JPanel {
       //przenies do controllera
       frame.addMouseMotionListener(new MouseMotionAdapter() {
     	  public void mouseMoved(MouseEvent e) {
-    	     StatisticsController.calcRealPath(e.getX(), e.getY(), lastX, lastY);
+    	     StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
 
     	     //System.out.println("Mouse moved " + e.getX() + " " + e.getY());
 
@@ -106,26 +106,31 @@ public class ButtonCircleView extends JPanel {
       frame.pack();
       frame.setLocationByPlatform(true);
       frame.setVisible(true);
+      frame.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
       
    }
 
-public List<RoundButton> getButtons() {
+   public void hideGui(){
+      frame.setVisible(false);
+   }
+
+   public List<RoundButton> getButtons() {
 	return buttons;
 }
 
-public void setButtons(List<RoundButton> buttons) {
+   public void setButtons(List<RoundButton> buttons) {
 	this.buttons = buttons;
 }
 
-public Timer getTimer() {
+   public Timer getTimer() {
 	return timer;
 }
 
-public JLabel getLabel() {
+   public JLabel getLabel() {
 	return label;
 }
 
-public void setLabel(String text) {
+   public void setLabel(String text) {
 	this.label.setText(text);
 }
    

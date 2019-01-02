@@ -73,13 +73,12 @@ public class QueWinFacController {
     }
 
     private void runTest(){
-        //questionWindowFactory.hide();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				ButtonCircleModel buttonCircleModel = new ButtonCircleModel();
 				buttonCircleModel.generateRandomNodes(15);
 				ButtonCircleView buttonCircleView = new ButtonCircleView(buttonCircleModel.getNodeLabels());
-				ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView);
+				ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView, questionWindowFactory);
 				buttonCircleController.initController();
 				//MainView mainView = new MainView();
 			}
