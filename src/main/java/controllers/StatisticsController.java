@@ -3,8 +3,6 @@ package controllers;
 import java.util.ArrayList;
 
 public class StatisticsController {
-    //dodać getery do poszczególnych paramaetrów - realnych długości najkrótszych długości
-
     static ArrayList<Node> nodes = new ArrayList<>(); //przechowuje informacje o położeniu i nazwie przycisku
     static ArrayList<NodePair> nodePairs = new ArrayList<>(); //przechowuje pary przyciskow i liczy najkrotsze odleglosci miedzy nimi oraz realne odległości wykonane przez uzytkownika
     static int shortestPathSum = 0; // sumaryczna dlugosc najkrotszej sciezki
@@ -60,6 +58,50 @@ public class StatisticsController {
             }
         }
         return null;
+    }
+
+    public static int getShortestPathSum(){
+        return shortestPathSum;
+    }
+
+    public static int getShortestPath(String id){
+        for(NodePair pair : nodePairs){
+            if(id.equals(pair.n1.name))
+                return pair.shortestLength;
+        }
+        return 0;
+    }
+
+    public static int getShortestPath(String id1, String id2){
+        for(NodePair pair : nodePairs){
+            if(id1.equals(pair.n1.name) && id2.equals(pair.n2.name))
+                return pair.shortestLength;
+        }
+        return 0;
+    }
+
+    public static int getRealPathSum(){
+        int realLength = 0;
+        for(NodePair pair : nodePairs){
+            realLength += pair.realLength;
+        }
+        return realLength;
+    }
+
+    public static int getRealPathBeetwen(String id1, String id2){
+        for (NodePair pair : nodePairs){
+            if (id1.equals(pair.n1.name) && id2.equals(pair.n2.name))
+                return pair.realLength;
+        }
+        return 0;
+    }
+
+    public static int getRealPathBeetwen(String FirstNodeId){
+        for (NodePair pair : nodePairs) {
+            if(FirstNodeId.equals(pair.n1.name))
+                return pair.realLength;
+        }
+        return 0;
     }
 }
 
