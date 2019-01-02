@@ -23,9 +23,9 @@ public class QueWinFacController {
         phaseNum = 1;
         queCode = "_";
         answCode = null;
-        phaseNum = 1;
-        queCode = "Q15";
-        answCode = "A56";
+//        phaseNum = 1;
+//        queCode = "Q15";
+//        answCode = "A56";
         updateQueCode();
         showWindow();
 
