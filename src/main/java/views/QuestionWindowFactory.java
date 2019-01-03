@@ -5,6 +5,9 @@ import data.AnsweredQuestions;
 import data.QuestionController;
 
 import javax.swing.*;
+
+import components.AnswerCheckBox;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +28,7 @@ public class QuestionWindowFactory extends JFrame {
     private JLabel questionText;
     private ArrayList<AbstractButton> buttonList = new ArrayList<AbstractButton>();
     Dimension screenSize;
+    ArrayList<String> answeredQuestions  = new ArrayList<>();; //przechowuje kody udzielonych odpowiedzi
 
 
     int licznik;
@@ -82,7 +86,7 @@ public class QuestionWindowFactory extends JFrame {
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            	answeredQuestions.clear(); //usun odpowiedzi przed przejsciem do kolejnego pytania
             }
         });
 
@@ -134,10 +138,10 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     private void showAnswers(){
-        AbstractButton checkBox;
+        AnswerCheckBox checkBox;
         String anwerCodes = DataController.getQueAnsCodes(questionCode); //pobiera kody odpowiedzi
         anwerCodes = anwerCodes.replace("\"", ""); //usuwa ' " '
-        ArrayList<String> answeredQuestions  = new ArrayList<>();; //przechowuje kody udzielonych odpowiedzi
+        
 
         String[] groupedAnswerCodes = anwerCodes.split(";"); //grupuje kody odpowiedzi
 
@@ -152,7 +156,7 @@ public class QuestionWindowFactory extends JFrame {
                 String ansCode = entry.getKey();
                 String answer = entry.getValue();
                 //System.out.println(ansCode+":"+answer);
-                checkBox = new JCheckBox(answer); //dodaje tekst
+                checkBox = new AnswerCheckBox(ansCode, answer); //dodaje tekst
 
                 if(isSingleChoice(answCode)) //jezeli pytanie jest jednokrotnego wyboru, to dodaje do grupy
                     group.add(checkBox); //dodaje przycisk do grupy przyciskow, czyli tam gdzie mozna go kliknac tylko raz
@@ -161,15 +165,16 @@ public class QuestionWindowFactory extends JFrame {
                 checkBox.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
+                    	AnswerCheckBox selectedAnswer = (AnswerCheckBox) e.getSource();
                         if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                            System.out.println(questionCode + " " + ansCode);
-                            answeredQuestions.add(ansCode);
+                            System.out.println(questionCode + " " + selectedAnswer.getAnswerCode());
+                            answeredQuestions.add(selectedAnswer.getAnswerCode());
                             AnsweredQuestions.addAnswer(questionCode, answeredQuestions);
 
                         }
                         else
                         {    //checkbox has been deselected
-                            answeredQuestions.remove(ansCode);
+                            answeredQuestions.remove(selectedAnswer.getAnswerCode());
                             AnsweredQuestions.addAnswer(questionCode, answeredQuestions);
                         }
                     }
