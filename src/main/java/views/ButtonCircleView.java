@@ -88,7 +88,7 @@ public class ButtonCircleView extends JPanel {
    }
 
    public void createAndShowGui() {
-      //ButtonCircleView mainPanel = new ButtonCircleView();
+      //ButtonCircleView answersPanel = new ButtonCircleView();
       frame = new JFrame("PanelsOnCircle");
       //przenies do controllera
       frame.addMouseMotionListener(new MouseMotionAdapter() {

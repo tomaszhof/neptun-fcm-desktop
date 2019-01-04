@@ -2,7 +2,6 @@ package views;
 
 import controllers.DataController;
 import data.AnsweredQuestions;
-import data.QuestionController;
 
 import javax.swing.*;
 
@@ -20,8 +19,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class QuestionWindowFactory extends JFrame {
-    JFrame mainPanel = new JFrame();
+    JFrame panel = new JFrame();
     JFrame load = new JFrame();
+
+    JPanel questionPanel = new JPanel();
+    JPanel answersPanel = new JPanel();
+    JPanel nextBtnPanel = new JPanel();
+
 
     JButton nextBtn;
     String questionCode;
@@ -36,19 +40,33 @@ public class QuestionWindowFactory extends JFrame {
     public QuestionWindowFactory(){
         super("Test");
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        answersPanel.add(nextBtnPanel);
 
-        mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainPanel.setLayout(new GridLayout(1,1));
-        mainPanel.setVisible(true);
-        mainPanel.setSize(screenSize.width/2, screenSize.height/2); //przyjmuje polowe wielkosci
-        mainPanel.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
+        panel.setLayout(new BorderLayout());
+        panel.setVisible(true);
+        panel.setSize(screenSize.width/2, screenSize.height/2); //przyjmuje polowe wielkosci
+        panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panel.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
 
+        answersPanel.setLayout(new GridLayout(1,1));
+        answersPanel.setSize(screenSize.width/2, screenSize.height/2); //przyjmuje polowe wielkosci
+        answersPanel.setVisible(true);
+        answersPanel.setBorder(BorderFactory.createEmptyBorder(0, 10,10,0));
+
+        questionPanel.setLayout(new GridLayout(1,1));
+        questionPanel.setVisible(true);
+        questionPanel.setBorder(BorderFactory.createEmptyBorder(10, 0,10,0));
 
         questionText = new JLabel("Pytanie :)");
         questionText.setVerticalAlignment(SwingConstants.TOP);
         questionText.setHorizontalAlignment(SwingConstants.CENTER);
+        questionText.setVisible(true);
+        questionText.setFont(new Font(questionText.getName(), Font.BOLD, 15));
+        questionPanel.add(questionText);
 
-        mainPanel.add(questionText);
+        panel.add(questionPanel, BorderLayout.PAGE_START);
+        panel.add(answersPanel, BorderLayout.CENTER);
+        panel.add(nextBtnPanel, BorderLayout.PAGE_END);
         load = setLoadingFrame();
     }
 
@@ -65,8 +83,8 @@ public class QuestionWindowFactory extends JFrame {
         String question = DataController.getQuestion(questionCode); //pytanie
         questionText.setText(question); //ustawia pole tekstowe na pytanie
 
-        mainPanel.revalidate();
-        mainPanel.repaint();
+        answersPanel.revalidate();
+        answersPanel.repaint();
 
         showAnswers();
 
@@ -83,6 +101,12 @@ public class QuestionWindowFactory extends JFrame {
     private void addNextBtn(){
         nextBtn = new JButton("Dalej");
         nextBtn.setBackground(Color.cyan);
+
+        Dimension dim = new Dimension(panel.getWidth()-50, 50);
+        nextBtn.setPreferredSize(dim);
+        nextBtn.setMaximumSize(dim);
+        nextBtn.setMinimumSize(dim);
+
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -90,10 +114,11 @@ public class QuestionWindowFactory extends JFrame {
             }
         });
 
-        buttonList.add(nextBtn); //dla latwiejszego usuwania
-        mainPanel.add(nextBtn); //dodaje do layoutu
-    }
 
+        buttonList.add(nextBtn); //dla latwiejszego usuwania
+
+        nextBtnPanel.add(nextBtn);
+    }
 
     private Map<String, String> getAnswers(String anwersCodes){
         Map<String, String>  answers = new HashMap<String, String>(); //mapa zawierajaca kodOdpowiedz:Odpowiedz
@@ -119,22 +144,25 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     public void removeAllButtons(){
-        for(AbstractButton button : buttonList)
-            mainPanel.remove(button);
+        for(AbstractButton button : buttonList){
+            answersPanel.remove(button);
+            nextBtnPanel.remove(button);
+        }
+
         buttonList.clear();
     }
 
     private void loadingPanelOn() {
         removeAllButtons();
-        mainPanel.setLayout(new GridLayout(licznik,1));
-        mainPanel.revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
-        mainPanel.repaint();  //to samo co powyzej
+        answersPanel.setLayout(new GridLayout(licznik,1));
+        answersPanel.revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
+        answersPanel.repaint();  //to samo co powyzej
     }
 
     private void loadingPanelOff() {
-        mainPanel.setLayout(new GridLayout(licznik,1));
-        mainPanel.revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
-        mainPanel.repaint();  //to samo co powyzej
+        answersPanel.setLayout(new GridLayout(licznik,1));
+        answersPanel.revalidate(); //wyczytalem, że to odswieza zawartosc ekranu - srednio odswieza, ale niech zostanie
+        answersPanel.repaint();  //to samo co powyzej
     }
 
     private void showAnswers(){
@@ -157,10 +185,12 @@ public class QuestionWindowFactory extends JFrame {
                 String answer = entry.getValue();
                 //System.out.println(ansCode+":"+answer);
                 checkBox = new AnswerCheckBox(ansCode, answer); //dodaje tekst
+                checkBox.setBorder(BorderFactory.createEmptyBorder(2, 0,2,0));
 
                 if(isSingleChoice(answCode)) //jezeli pytanie jest jednokrotnego wyboru, to dodaje do grupy
                     group.add(checkBox); //dodaje przycisk do grupy przyciskow, czyli tam gdzie mozna go kliknac tylko raz
 
+                checkBox.setSize(checkBox.getWidth(), 50);
                 //dodaje listener do checboxa
                 checkBox.addItemListener(new ItemListener() {
                     @Override
@@ -180,7 +210,7 @@ public class QuestionWindowFactory extends JFrame {
                     }
                 });
                 buttonList.add(checkBox);
-                mainPanel.add(checkBox); //dodaje przycisk do ekranu
+                answersPanel.add(checkBox); //dodaje przycisk do ekranu
             }
             Buttgroups.add(group); //dodaje grupę przyciskow do tablicy przyciskow
         }
@@ -204,11 +234,11 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     public void hide(){
-        mainPanel.setVisible(false);
+        answersPanel.setVisible(false);
     }
 
     public void unhide(){
-        mainPanel.setVisible(true);
+        answersPanel.setVisible(true);
     }
 }
 
