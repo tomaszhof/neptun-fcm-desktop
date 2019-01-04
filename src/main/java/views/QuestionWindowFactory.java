@@ -30,7 +30,8 @@ public class QuestionWindowFactory extends JFrame {
     JButton nextBtn;
     String questionCode;
     private JLabel questionText;
-    private ArrayList<AbstractButton> buttonList = new ArrayList<AbstractButton>();
+    private ArrayList<Component> componentList = new ArrayList<>();
+
     Dimension screenSize;
     ArrayList<String> answeredQuestions  = new ArrayList<>();; //przechowuje kody udzielonych odpowiedzi
 
@@ -44,12 +45,12 @@ public class QuestionWindowFactory extends JFrame {
 
         panel.setLayout(new BorderLayout());
         panel.setVisible(true);
-        panel.setSize(screenSize.width/2, screenSize.height/2); //przyjmuje polowe wielkosci
+        panel.setSize((int) (screenSize.width/1.5), (int) (screenSize.height/1.5)); //przyjmuje polowe wielkosci
         panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
 
         answersPanel.setLayout(new GridLayout(1,1));
-        answersPanel.setSize(screenSize.width/2, screenSize.height/2); //przyjmuje polowe wielkosci
+        //answersPanel.setSize((int) ((double)screenSize.width/3), (int) ((double)screenSize.height/3)); //przyjmuje polowe wielkosci
         answersPanel.setVisible(true);
         answersPanel.setBorder(BorderFactory.createEmptyBorder(0, 10,10,0));
 
@@ -115,7 +116,7 @@ public class QuestionWindowFactory extends JFrame {
         });
 
 
-        buttonList.add(nextBtn); //dla latwiejszego usuwania
+        componentList.add(nextBtn); //dla latwiejszego usuwania
 
         nextBtnPanel.add(nextBtn);
     }
@@ -139,17 +140,37 @@ public class QuestionWindowFactory extends JFrame {
         return answers;
     }
 
+    //zwraca tablice odpoweidzi
+    private ArrayList<Answer> getAnswers2(String anwersCodes){
+        ArrayList<Answer> answers = new ArrayList<>();
+
+        Pattern pattern; //pattern do regexu wykrywającego odpoweidzi do pytania
+        pattern = Pattern.compile("(A\\d+)|(PA\\d+)");
+
+        Matcher m = pattern.matcher(anwersCodes);
+
+        //znajduje wszystkie dopasowania
+        while (m.find()) {
+            String key = m.group();
+            String answer = DataController.getAnswer(m.group());
+            answer = answer.replace("\"", ""); //wyrzuca " z odpowiedzi
+            System.out.println(key + ":" + answer);
+            answers.add(new Answer(key, answer));
+        }
+        return answers;
+    }
+
     private boolean isSingleChoice(String answerCodes){
         return answerCodes.matches("((A\\d+|PA\\d+)\\|)+(A\\d+|PA\\d+)");
     }
 
     public void removeAllButtons(){
-        for(AbstractButton button : buttonList){
-            answersPanel.remove(button);
-            nextBtnPanel.remove(button);
+        for(Component component : componentList){
+            answersPanel.remove(component);
+            nextBtnPanel.remove(component);
         }
 
-        buttonList.clear();
+        componentList.clear();
     }
 
     private void loadingPanelOn() {
@@ -177,12 +198,19 @@ public class QuestionWindowFactory extends JFrame {
         ArrayList<ButtonGroup> Buttgroups = new ArrayList<>(); //tablica grup
         for(String answCode : groupedAnswerCodes){
             ButtonGroup group = new ButtonGroup(); //grupa buttonow
-            Map<String, String>  answers = getAnswers(answCode);
+            //Map<String, String>  answers = getAnswers(answCode);
+            ArrayList<Answer> answers = this.getAnswers2(answCode);
 
-            for(Map.Entry<String, String> entry : answers.entrySet()) {
+            JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+            answersPanel.add(separator);
+            componentList.add(separator);
+            licznik++;
+
+            for(Answer answerTmp : answers) {
                 licznik++;
-                String ansCode = entry.getKey();
-                String answer = entry.getValue();
+                String ansCode = answerTmp.getAnswerCode();
+                String answer = answerTmp.getAnswer();
+
                 //System.out.println(ansCode+":"+answer);
                 checkBox = new AnswerCheckBox(ansCode, answer); //dodaje tekst
                 checkBox.setBorder(BorderFactory.createEmptyBorder(2, 0,2,0));
@@ -209,9 +237,10 @@ public class QuestionWindowFactory extends JFrame {
                         }
                     }
                 });
-                buttonList.add(checkBox);
+                componentList.add(checkBox);
                 answersPanel.add(checkBox); //dodaje przycisk do ekranu
             }
+
             Buttgroups.add(group); //dodaje grupę przyciskow do tablicy przyciskow
         }
     }
@@ -234,11 +263,29 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     public void hide(){
-        answersPanel.setVisible(false);
+        panel.setVisible(false);
     }
 
     public void unhide(){
-        answersPanel.setVisible(true);
+        panel.setVisible(true);
+    }
+}
+
+class Answer{
+    String answerCode;
+    String answer;
+
+    public Answer(String answerCode, String answer) {
+        this.answerCode = answerCode;
+        this.answer = answer;
+    }
+
+    public String getAnswerCode() {
+        return answerCode;
+    }
+
+    public String getAnswer() {
+        return answer;
     }
 }
 
