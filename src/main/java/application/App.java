@@ -10,6 +10,8 @@ import views.*;
 public class App {
     //komentarz tylko po to, żeby wprowadzić zmiany i sprawdzić czy jestem contributor'em
 	public static void main(String[] args) {
+		String currentEncoding = System.getProperty("file.encoding");
+		System.setProperty("file.encoding", "UTF-8");
 		NeptunQAController qaController = NeptunQAController.get();
 		String startQuestionCodePhase1 = qaController.getNextQuestionPhase1("_", null);
 		String sampleNextQuestionCodePhase1 = qaController.getNextQuestionPhase1("PQ1", "PA7");
@@ -25,6 +27,8 @@ public class App {
 
 		QueWinFacController queWinFacController = new QueWinFacController();
 
+		//restore default encoding for current operating system and JVM
+		System.setProperty("file.encoding", currentEncoding);
 //		SwingUtilities.invokeLater(new Runnable() {
 //			public void run() {
 //				ButtonCircleModel buttonCircleModel = new ButtonCircleModel();
