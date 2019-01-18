@@ -12,6 +12,7 @@ import components.RoundButton;
 import models.ButtonCircleModel;
 import models.ButtonModel;
 import views.ButtonCircleView;
+import views.InformationFieldPostTest;
 import views.QuestionWindowFactory;
 
 public class ButtonCircleController {
@@ -89,6 +90,7 @@ public class ButtonCircleController {
 
 				//po kliknieciu na maxID ponownie pokazuje okno z pytaniami
 				QWF.unhide();
+				InformationFieldPostTest informationFieldPostTest = new InformationFieldPostTest();
 				buttonCircleView.hideGui();
 			}
 			else if(button.getText().equals("0")) {

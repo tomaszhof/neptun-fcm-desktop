@@ -192,6 +192,28 @@ public class StatisticsController {
 
         displayRealPaths();
     }
+
+    public static String getStatistics(){
+        return "Sumaryczna długość najkrótszych ścieżek: " + getShortestPathSum() + "\n"
+                + "Sumaryczna długość realnych ścieżek: " + getRealPathSum() + "\n"
+                + "Średnie ochylenie: " + getAverageDeviation() + "\n"
+                + "Średnie maksymalne odchylenie: " + getAverageMaxDeviation() + "\n"
+                + getAllInfoPaths();
+
+    }
+
+    private static String getAllInfoPaths(){
+        String toReturn = "";
+        for(NodePair node : nodePairs){
+            toReturn += "Ścieżka " + node.n1.name + ":" + node.n2.name
+                    + " Najkrótszy dystans:" + node.shortestLength
+                    + "\tRealny dystans: " + node.realLength
+                    + "\n\tOdchylenie średnie: " + node.averageDeviation
+                    + "\t Odchylenie maksymalne: " + node.maxDeviation
+                    + "\n";
+        }
+        return toReturn;
+    }
 }
 
 class Node{
