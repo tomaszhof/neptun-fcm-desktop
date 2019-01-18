@@ -3,6 +3,7 @@ package controllers;
 import data.AnsweredQuestions;
 import models.ButtonCircleModel;
 import views.ButtonCircleView;
+import views.InformationField;
 import views.QuestionWindowFactory;
 
 import javax.swing.*;
@@ -23,6 +24,24 @@ public class QueWinFacController {
         phaseNum = 1;
         queCode = "_";
         answCode = null;
+//        phaseNum = 1;
+//        queCode = "Q15";
+//        answCode = "A56";
+        updateQueCode();
+        showWindow();
+    }
+
+    public QueWinFacController(int phase) {
+        qaController = NeptunQAController.get();
+        questionWindowFactory = new QuestionWindowFactory();
+        if(phase == 1){
+            phaseNum = 1;
+            queCode = "_";
+            answCode = null;
+        }
+        else if(phase == 2){
+            queCode = "P2";
+        }
 //        phaseNum = 1;
 //        queCode = "Q15";
 //        answCode = "A56";
@@ -56,9 +75,8 @@ public class QueWinFacController {
                 //tu sie konczy
             }
         }
-
         if (queCode.equals("P2")){
-            runTest();
+            preTest();
             phaseNum = 2;
             queCode = "_";
             updateQueCode();
@@ -84,5 +102,24 @@ public class QueWinFacController {
 			}
 		});
 		//questionWindowFactory.unhide();
+    }
+
+    private void preTest(){
+        questionWindowFactory.hide();
+        JFrame infField = new InformationField();
+        ((InformationField) infField).skitpBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                questionWindowFactory.unhide();
+            }
+        });
+
+        ((InformationField) infField).nextBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runTest();
+            }
+        });
+
     }
 }

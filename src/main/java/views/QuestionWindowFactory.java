@@ -246,17 +246,17 @@ public class QuestionWindowFactory extends JFrame {
     }
 
     private JFrame setLoadingFrame(){
-        ImageIcon loading = new ImageIcon("src/main/resources/ajax-loader.gif"); //loading panel
-        JLabel loadingPanel = new JLabel("Ładowanie... ", loading, JLabel.CENTER); //wlasciwy loading panel
+        //ImageIcon loading = new ImageIcon("src/main/resources/ajax-loader.gif"); //loading panel
+        //JLabel loadingPanel = new JLabel("Ładowanie... ", loading, JLabel.CENTER); //wlasciwy loading panel
 
-        JFrame secPan = new JFrame();
-        secPan = new JFrame();
+        JFrame secPan = new JFrame("Ładowanie");
         secPan.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         secPan.setLayout(new GridLayout(1,1));
         secPan.setVisible(true);
         secPan.setSize(screenSize.width/4, screenSize.height/4); //przyjmuje polowe wielkosci
         secPan.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
-        secPan.add(loadingPanel);
+        //secPan.add(loadingPanel);
+        secPan.add(new JLabel("Ładowanie", SwingConstants.CENTER));
         secPan.setVisible(true);
 
         return secPan;
