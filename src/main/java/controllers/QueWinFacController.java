@@ -3,6 +3,7 @@ package controllers;
 import data.AnsweredQuestions;
 import models.ButtonCircleModel;
 import views.ButtonCircleView;
+import views.InformationFieldPostTest;
 import views.InformationFieldPreTest;
 import views.QuestionWindowFactory;
 
@@ -101,26 +102,19 @@ public class QueWinFacController {
 				//MainView mainView = new MainView();
 			}
 		});
-		//questionWindowFactory.unhide();
     }
 
     private void preTest(){
         questionWindowFactory.hide();
-        JFrame infField = new InformationFieldPreTest();
-        ((InformationFieldPreTest) infField).skitpBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                questionWindowFactory.unhide();
-            }
-        });
+        JFrame infFieldPre = new InformationFieldPreTest();
 
-        ((InformationFieldPreTest) infField).nextBtn.addActionListener(new ActionListener() {
+
+        ((InformationFieldPreTest) infFieldPre).nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(((InformationFieldPreTest) infField).getIsAvailableToNext())
+                if(((InformationFieldPreTest) infFieldPre).getIsAvailableToNext())
                     runTest();
             }
         });
-
     }
 }

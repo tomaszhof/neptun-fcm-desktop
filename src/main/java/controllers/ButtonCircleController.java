@@ -89,8 +89,7 @@ public class ButtonCircleController {
 				StatisticsController.printAllStats();
 
 				//po kliknieciu na maxID ponownie pokazuje okno z pytaniami
-				QWF.unhide();
-				InformationFieldPostTest informationFieldPostTest = new InformationFieldPostTest();
+				InformationFieldPostTest informationFieldPostTest = new InformationFieldPostTest(QWF);
 				buttonCircleView.hideGui();
 			}
 			else if(button.getText().equals("0")) {

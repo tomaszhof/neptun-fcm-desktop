@@ -194,23 +194,22 @@ public class StatisticsController {
     }
 
     public static String getStatistics(){
-        return "Sumaryczna długość najkrótszych ścieżek: " + getShortestPathSum() + "\n"
-                + "Sumaryczna długość realnych ścieżek: " + getRealPathSum() + "\n"
-                + "Średnie ochylenie: " + getAverageDeviation() + "\n"
-                + "Średnie maksymalne odchylenie: " + getAverageMaxDeviation() + "\n"
-                + getAllInfoPaths();
+        return "Sumaryczna długość najkrótszych ścieżek: " + getShortestPathSum() + " px\n"
+                + "Sumaryczna długość realnych ścieżek: " + getRealPathSum() + " px\n"
+                + "Średnie ochylenie: " + (int)getAverageDeviation() + " px\n"
+                + "Średnie maksymalne odchylenie: " + (int)getAverageMaxDeviation() + " px";
 
     }
 
     private static String getAllInfoPaths(){
-        String toReturn = "";
+        String toReturn = "WYNIKI:\n";
         for(NodePair node : nodePairs){
             toReturn += "Ścieżka " + node.n1.name + ":" + node.n2.name
                     + " Najkrótszy dystans:" + node.shortestLength
                     + "\tRealny dystans: " + node.realLength
-                    + "\n\tOdchylenie średnie: " + node.averageDeviation
-                    + "\t Odchylenie maksymalne: " + node.maxDeviation
-                    + "\n";
+                    + "\n\tOdchylenie średnie: " + (int)node.averageDeviation
+                    + "\t Odchylenie maksymalne: " + (int)node.maxDeviation
+                    + "\n\n";
         }
         return toReturn;
     }

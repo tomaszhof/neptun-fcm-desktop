@@ -45,7 +45,7 @@ public class InformationFieldPreTest extends JFrame {
         infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_START);
         infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_END);
         infromPanel.add(nrTextField, BorderLayout.NORTH);
-        infromPanel.setBorder(BorderFactory.createEmptyBorder(80, 0,80,0));
+        infromPanel.setBorder(BorderFactory.createEmptyBorder(80, 10,80,10));
 
         buttonsPanel.add(skitpBtn);
         buttonsPanel.add(nextBtn);
@@ -73,10 +73,13 @@ public class InformationFieldPreTest extends JFrame {
         if(isAvailableToNext){
             panel.setVisible(false);
         }
-
-        nextBtn.setText(nextBtnText2);
-        isAvailableToNext = true;
-        this.nrTextField.setText(convertToMultiline(textToShow2));
+        else{
+            nrTextField.setText(convertToMultiline(textToShow2));
+            nextBtn.setText(nextBtnText2);
+            validate();
+            repaint();
+            isAvailableToNext = true;
+        }
     }
 
     void onSkipBtnClick(){
