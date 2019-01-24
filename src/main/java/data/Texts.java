@@ -31,4 +31,6 @@ public class Texts {
             "\n" +
             "Po wykonaniu lekcji wyświetl wyniki i zapisz je lub zapamiętaj w celu oceny interakcji.\n";
 
+    public static final String textFinish = "Koniec działania programu. Dziękujemy\n";
+
 }

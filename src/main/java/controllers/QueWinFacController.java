@@ -2,11 +2,9 @@ package controllers;
 
 import data.AnsweredQuestions;
 import models.ButtonCircleModel;
-import views.ButtonCircleView;
-import views.InformationFieldPostTest;
-import views.InformationFieldPreTest;
-import views.QuestionWindowFactory;
+import views.*;
 
+import javax.print.attribute.standard.Finishings;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,7 +56,13 @@ public class QueWinFacController {
         questionWindowFactory.getNextBtn().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                nextQuestion();
+                try{
+                    nextQuestion();
+                }
+                catch (Exception exc){
+                    System.out.println(exc.getMessage());
+                    FinishText finishText = new FinishText(questionWindowFactory);
+                }
             }
         });
     }
@@ -73,6 +77,8 @@ public class QueWinFacController {
             if (queCode.equals("_")){
                 System.out.println("Finish");
                 AnsweredQuestions.printAll();
+
+                return;
                 //tu sie konczy
             }
         }
