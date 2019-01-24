@@ -87,6 +87,8 @@ public class ButtonCircleController {
 				Timer timer = buttonCircleView.getTimer();
 				timer.stop();
 				StatisticsController.printAllStats();
+				StatisticsController.printDevioations();
+				StatisticsController.calcAllU();
 
 				//po kliknieciu na maxID ponownie pokazuje okno z pytaniami
 				InformationFieldPostTest informationFieldPostTest = new InformationFieldPostTest(QWF);
@@ -98,7 +100,11 @@ public class ButtonCircleController {
 				Timer timer = buttonCircleView.getTimer();
 				timer.addActionListener(new ActionListener() {
 			        public void actionPerformed(ActionEvent e) {
+			        	timer.setDelay(1);
 			        	long time = System.currentTimeMillis() - buttonCircleModel.getStartTime();
+			        	StatisticsController.setActTimeTmp(time);
+			        	StatisticsController.setTime(time);
+						System.out.println(time);
 			            buttonCircleView.setLabel(""+time);
 			        }
 			    });

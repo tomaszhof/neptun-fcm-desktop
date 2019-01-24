@@ -16,6 +16,7 @@ public class InformationFieldPreTest extends JFrame {
     boolean isAvailableToNext = false;
     JPanel infromPanel = new JPanel();
     JPanel buttonsPanel = new JPanel();
+    QuestionWindowFactory QWF;
 
 
     GridBagConstraints c = new GridBagConstraints();
@@ -28,7 +29,9 @@ public class InformationFieldPreTest extends JFrame {
     Dimension screenSize;
 
 
-    public InformationFieldPreTest(){
+    public InformationFieldPreTest(QuestionWindowFactory QWF){
+        this.QWF = QWF;
+        QWF.hide();
         nrTextField.setText(convertToMultiline(textToShow));
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         panel.setLayout(new BorderLayout());
@@ -72,6 +75,7 @@ public class InformationFieldPreTest extends JFrame {
         //pociągnięcie z bazy informacji o aktualnym użytkowniku
         if(isAvailableToNext){
             panel.setVisible(false);
+            QWF.unhide();
         }
         else{
             nrTextField.setText(convertToMultiline(textToShow2));
@@ -84,7 +88,7 @@ public class InformationFieldPreTest extends JFrame {
 
     void onSkipBtnClick(){
         panel.setVisible(false);
-
+        QWF.unhide();
     }
 
     public static String convertToMultiline(String orig)

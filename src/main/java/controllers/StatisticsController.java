@@ -1,5 +1,7 @@
 package controllers;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class StatisticsController {
@@ -8,6 +10,10 @@ public class StatisticsController {
     static ArrayList<NodePair> nodePairs = new ArrayList<>(); //przechowuje pary przyciskow i liczy najkrotsze odleglosci miedzy nimi oraz realne odległości wykonane przez uzytkownika
     static int shortestPathSum = 0; // sumaryczna dlugosc najkrotszej sciezki
     static String actualNode;
+    static long time; //ms
+    static long actTimeTmp;
+    static ArrayList<ForIntegral> integrals;
+
 
     public static void addNode(String name, int xCenter, int yCenter){
         nodes.add(new Node(name, xCenter, yCenter));
@@ -20,6 +26,26 @@ public class StatisticsController {
     static public void makeCalculations(int actX, int actY, int lastX, int lastY){
         calcRealPath(actX, actY, lastX, lastY);
         calcDeviation(actX, actY);
+        manageU(actX, actY);
+    }
+
+    static void manageU(int actX, int actY){
+        for(NodePair pair : nodePairs){
+            if(pair.n1.name.equals(actualNode)){
+                int a = (pair.n1.y - pair.n2.y) / (pair.n1.x - pair.n2.x);
+                int b = pair.n1.y - a * pair.n1.x;
+
+                int A = a;
+                int B = -1;
+                int C = b;
+
+                double deviation = ( Math.abs( A * actX + B * actY + C ) ) / ( Math.sqrt( Math.pow(A, 2) + Math.pow(B, 2) ) );
+                pair.integrals.add(new ForIntegral(actTimeTmp, (int)deviation));
+
+                //tutaj sprawdzam jaki jest aktualny czas i odległość od wyimaginowanej linii do punktu X,Y.
+                //liczę pole. Zapisuję poprzedni czas, żeby mieć punkt odniesienia do
+            }
+        }
     }
 
     static void calcRealPath(int actX, int actY, int lastX, int lastY){
@@ -53,9 +79,19 @@ public class StatisticsController {
                     pair.maxDeviation = deviation;
 
                 pair.averageDeviation = (pair.averageDeviation * pair.devCounter + deviation) / ( ++pair.devCounter );
+
+
+                //tutaj sprawdzam jaki jest aktualny czas i odległość od wyimaginowanej linii do punktu X,Y.
+                //liczę pole. Zapisuję poprzedni czas, żeby mieć punkt odniesienia do
             }
         }
         //l max odchylenia koniec
+    }
+
+    public static void printDevioations(){
+        for(NodePair pair : nodePairs){
+            System.out.println(pair.n1.name + ":" + pair.n2.name + "\n" + pair.devToString() + "\n\n");
+        }
     }
 
     static void displayRealPaths(){
@@ -87,6 +123,10 @@ public class StatisticsController {
             }
         }
         return null;
+    }
+
+    public static void setActTimeTmp(long time){
+        actTimeTmp = time;
     }
 
     public static boolean isIsPEtest() {
@@ -194,11 +234,33 @@ public class StatisticsController {
     }
 
     public static String getStatistics(){
-        return "Sumaryczna długość najkrótszych ścieżek: " + getShortestPathSum() + " px\n"
+        return "Czas: " + getTime() + " s\n"
+                + "Sumaryczna długość najkrótszych ścieżek: " + getShortestPathSum() + " px\n"
                 + "Sumaryczna długość realnych ścieżek: " + getRealPathSum() + " px\n"
                 + "Średnie ochylenie: " + (int)getAverageDeviation() + " px\n"
-                + "Średnie maksymalne odchylenie: " + (int)getAverageMaxDeviation() + " px";
+                + "Średnie maksymalne odchylenie: " + (int)getAverageMaxDeviation() + " px\n\n"
+                + "Średni współczynnik U: " + (int)getAverageU() + "\n\n"
+                + "Poszczególne współczynniki: \n" + getAllU();
 
+
+    }
+
+    private static String getAllU(){
+        String toReturn = "";
+        for(NodePair pair : nodePairs){
+            toReturn += pair.UtoString() + "\n";
+        }
+        return toReturn;
+    }
+
+    private static double getAverageU(){
+        int counter = 0;
+        double Usum = 0;
+        for(NodePair pair : nodePairs){
+            counter++;
+            Usum += pair.getU();
+        }
+        return Usum/counter;
     }
 
     private static String getAllInfoPaths(){
@@ -213,6 +275,27 @@ public class StatisticsController {
         }
         return toReturn;
     }
+
+    static void setTime(long ti){
+        System.out.println("Setting time: " + ti);
+        time = ti;
+    }
+
+    static String getTime(){
+        double ti = time/1000;
+        ti = BigDecimal.valueOf(ti)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+        return String.valueOf(ti);
+    }
+
+    static void calcAllU(){
+        for(NodePair pair : nodePairs) {
+            pair.calcU();
+            System.out.println("U: " + pair.getU());
+        }
+    }
+
 }
 
 class Node{
@@ -234,6 +317,8 @@ class NodePair{
     double maxDeviation; //maksymalne odchylenie
     double averageDeviation; //srednie odchylenie
     int devCounter = 0;
+    ArrayList<ForIntegral> integrals = new ArrayList<>();
+    double U = 0;
 
     NodePair(Node n1, Node n2){
         this.n1 = n1;
@@ -250,11 +335,10 @@ class NodePair{
         int tmp2 = (int) Math.pow((y2 - y1), 2);
         //System.out.println("x1/x2/y1/y2" + x1 + " " + x2 + " " + y1 + " " + y2);
         //System.out.println(tmp1 + " tmp1/tmp2 " + tmp2);
-
-
         shortestLength = (int) Math.sqrt(tmp1 + tmp2);
         System.out.println("Length: " + n1.name + " " + n2.name + " " + shortestLength);
     }
+
 
     public Node getN1() {
         return n1;
@@ -268,6 +352,52 @@ class NodePair{
         return shortestLength;
     }
 
+    public String UtoString(){
+        return n1.name + "-" + n2.name + ": U = " + (int)U;
+    }
+
+    public String devToString(){
+        String toReturn = "";
+        for(ForIntegral integral : integrals){
+            toReturn+= "[" + integral.getTime() + " , " + integral.getDeviation() + "]\n";
+        }
+        return toReturn;
+    }
+
+    public void calcU(){
+        for(int i = 1; i < integrals.size(); i++){
+            double height = integrals.get(i).getDeviation();
+            double width = integrals.get(i).getTime() - integrals.get(i-1).getTime();
+            U += (width * height) / 1000;
+        }
+    }
+
+    public double getU() {
+        return U;
+    }
+}
+
+class ForIntegral{
+    private long time;
+    private int deviation;
+
+    ForIntegral(long time, int deviation){
+        this.time = time;
+        this.deviation = deviation;
+    }
+
+    void printAll(){
+        System.out.println("deviation:" + deviation + " time: " + time);
+    }
+
+
+    public long getTime() {
+        return time;
+    }
+
+    public int getDeviation() {
+        return deviation;
+    }
 }
 
 

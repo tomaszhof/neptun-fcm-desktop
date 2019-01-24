@@ -105,8 +105,7 @@ public class QueWinFacController {
     }
 
     private void preTest(){
-        questionWindowFactory.hide();
-        JFrame infFieldPre = new InformationFieldPreTest();
+        JFrame infFieldPre = new InformationFieldPreTest(questionWindowFactory);
 
 
         ((InformationFieldPreTest) infFieldPre).nextBtn.addActionListener(new ActionListener() {

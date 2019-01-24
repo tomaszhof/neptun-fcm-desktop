@@ -27,7 +27,7 @@ public class LoginView extends JFrame{
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         panel.setLayout(new BorderLayout());
         panel.setVisible(true);
-        panel.setSize((int) (screenSize.width/3), (int) (screenSize.height/3)); //przyjmuje polowe wielkosci
+        panel.setSize((int) (screenSize.width/3), (int) (screenSize.height/2.5)); //przyjmuje polowe wielkosci
         panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
 
