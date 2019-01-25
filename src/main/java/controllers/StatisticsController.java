@@ -16,6 +16,7 @@ public class StatisticsController {
     public static void reset(){
         nodes = new ArrayList<>();
         nodePairs = new ArrayList<>();
+        shortestPathSum = 0;
     }
 
 

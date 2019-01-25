@@ -49,9 +49,9 @@ public class InformationFieldPostTest extends JFrame {
         infromPanel.setBorder(BorderFactory.createEmptyBorder(10, 10,10,10));
 
         //buttonsPanel.add(skitpBtn);
-        buttonsPanel.add(nextBtn);
         buttonsPanel.add(makeTestAgainBtn);
-
+        buttonsPanel.add(nextBtn);
+        
         panel.add(infromPanel, BorderLayout.CENTER);
         panel.add(buttonsPanel, BorderLayout.SOUTH);
 
