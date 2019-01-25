@@ -1,6 +1,9 @@
 package views;
 
+import controllers.ButtonCircleController;
 import controllers.QueWinFacController;
+import controllers.StatisticsController;
+import models.ButtonCircleModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +51,7 @@ public class InformationFieldPreTest extends JFrame {
         infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_START);
         infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_END);
         infromPanel.add(nrTextField, BorderLayout.NORTH);
-        infromPanel.setBorder(BorderFactory.createEmptyBorder(80, 10,80,10));
+        infromPanel.setBorder(BorderFactory.createEmptyBorder(10, 10,10,10));
 
         buttonsPanel.add(skitpBtn);
         buttonsPanel.add(nextBtn);
@@ -74,8 +77,8 @@ public class InformationFieldPreTest extends JFrame {
     void onNextBtnClick(){
         //pociągnięcie z bazy informacji o aktualnym użytkowniku
         if(isAvailableToNext){
-            panel.setVisible(false);
             QWF.unhide();
+            runTest();
         }
         else{
             nrTextField.setText(convertToMultiline(textToShow2));
@@ -98,5 +101,20 @@ public class InformationFieldPreTest extends JFrame {
 
     public boolean getIsAvailableToNext(){
         return this.isAvailableToNext;
+    }
+
+    private void runTest(){
+        panel.setVisible(false);
+        StatisticsController.reset();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                ButtonCircleModel buttonCircleModel = new ButtonCircleModel();
+                buttonCircleModel.generateRandomNodes(15);
+                ButtonCircleView buttonCircleView = new ButtonCircleView(buttonCircleModel.getNodeLabels());
+                ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView, QWF);
+                buttonCircleController.initController();
+                //MainView mainView = new MainView();
+            }
+        });
     }
 }

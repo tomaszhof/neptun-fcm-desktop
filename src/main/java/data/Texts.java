@@ -12,7 +12,7 @@ public class Texts {
     public static final String textToShow2 = "W teście 1 na ekranie monitora po okręgu rozmieszczonych jest 15 niebieskich okręgów ponumerowanych od 0 do 14. \n" +
             "Użytkownik do wykonania zadania dysponuje dobranym urządzeniem sterowniczym i wskaźnikiem w kształcie strzałki.\n" +
             "\n" +
-            "Zadaniem użytkownika jest dosuwanie wskaźnika (i potwierdzanie tego dosunięcia) do okręgów w kolejności liczbowej od 1 do 15.\n" +
+            "Zadaniem użytkownika jest dosuwanie wskaźnika (i potwierdzanie tego dosunięcia) do okręgów w kolejności liczbowej od 0 do 14.\n" +
             "Każdą czynność dosunięcia i potwierdzenia dosunięcia użytkownik wykonuje za pomocą dobranego urządzenia i elementów sterowniczych w wybrany przez siebie sposób.\n" +
             "\n" +
             "Każde dosunięcie wskaźnika do kolejnego okręgu należy wykonać dokładnie i możliwie szybko.\n" +

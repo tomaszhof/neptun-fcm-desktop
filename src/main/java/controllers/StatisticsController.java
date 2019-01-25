@@ -12,7 +12,11 @@ public class StatisticsController {
     static String actualNode;
     static long time; //ms
     static long actTimeTmp;
-    static ArrayList<ForIntegral> integrals;
+
+    public static void reset(){
+        nodes = new ArrayList<>();
+        nodePairs = new ArrayList<>();
+    }
 
 
     public static void addNode(String name, int xCenter, int yCenter){
@@ -295,7 +299,6 @@ public class StatisticsController {
             System.out.println("U: " + pair.getU());
         }
     }
-
 }
 
 class Node{

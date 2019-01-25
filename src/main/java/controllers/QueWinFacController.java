@@ -97,29 +97,17 @@ public class QueWinFacController {
         showWindow();
     }
 
-    private void runTest(){
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				ButtonCircleModel buttonCircleModel = new ButtonCircleModel();
-				buttonCircleModel.generateRandomNodes(15);
-				ButtonCircleView buttonCircleView = new ButtonCircleView(buttonCircleModel.getNodeLabels());
-				ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView, questionWindowFactory);
-				buttonCircleController.initController();
-				//MainView mainView = new MainView();
-			}
-		});
-    }
+
 
     private void preTest(){
         JFrame infFieldPre = new InformationFieldPreTest(questionWindowFactory);
 
-
-        ((InformationFieldPreTest) infFieldPre).nextBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(((InformationFieldPreTest) infFieldPre).getIsAvailableToNext())
-                    runTest();
-            }
-        });
+//        ((InformationFieldPreTest) infFieldPre).nextBtn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(((InformationFieldPreTest) infFieldPre).getIsAvailableToNext())
+//                    //runTest();
+//            }
+//        });
     }
 }

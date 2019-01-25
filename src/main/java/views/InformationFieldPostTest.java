@@ -1,7 +1,5 @@
 package views;
 
-import controllers.QueWinFacController;
-import static javax.swing.ScrollPaneConstants.*;
 import controllers.StatisticsController;
 import data.Texts;
 
@@ -11,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static data.Texts.*;
-import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 
 public class InformationFieldPostTest extends JFrame {
     JFrame panel = new JFrame();
@@ -25,6 +22,7 @@ public class InformationFieldPostTest extends JFrame {
     JLabel nrTextField = new JLabel();
 
     public JButton nextBtn = new JButton("Przejdz do testu 2");
+    public JButton makeTestAgainBtn = new JButton("Wykonaj test jeszcze raz");
     //public JButton skitpBtn = new JButton("Pomiń test");
 
     Dimension screenSize;
@@ -47,14 +45,12 @@ public class InformationFieldPostTest extends JFrame {
 
         nrTextField.setHorizontalAlignment(SwingConstants.CENTER);
 
-
-        //infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_START);
-        //infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_END);
         infromPanel.add(nrTextField);
-        infromPanel.setBorder(BorderFactory.createEmptyBorder(80, 10,80,10));
+        infromPanel.setBorder(BorderFactory.createEmptyBorder(10, 10,10,10));
 
         //buttonsPanel.add(skitpBtn);
         buttonsPanel.add(nextBtn);
+        buttonsPanel.add(makeTestAgainBtn);
 
         panel.add(infromPanel, BorderLayout.CENTER);
         panel.add(buttonsPanel, BorderLayout.SOUTH);
@@ -67,6 +63,15 @@ public class InformationFieldPostTest extends JFrame {
                 onNextBtnClick();
             }
         });
+
+        makeTestAgainBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onMakeTestAgainBtn();
+            }
+        });
+
+
     }
 
     void onNextBtnClick(){
@@ -80,7 +85,11 @@ public class InformationFieldPostTest extends JFrame {
             QWF.unhide();
             panel.setVisible(false);
         }
+    }
 
+    void onMakeTestAgainBtn(){
+        InformationFieldPreTest informationFieldPreTest = new InformationFieldPreTest(QWF);
+        panel.setVisible(false);
     }
 
     public static String convertToMultiline(String orig)
