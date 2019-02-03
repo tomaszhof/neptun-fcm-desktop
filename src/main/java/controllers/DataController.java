@@ -11,14 +11,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Set;
 
+import org.springframework.web.client.RestTemplate;
+
 public class DataController {
 //    private static final String importer = "https://neptun-fcm.herokuapp.com/importer";
     private static final String getQuestionsUrl = "https://neptun-fcm.herokuapp.com/api/questions";
     private static final String getQueAnsCodeUrl = "https://neptun-fcm.herokuapp.com/api/question/";
     private static final String getAnswersUrl = "https://neptun-fcm.herokuapp.com/api/answers";
     private static final String getRulesUrl = "https://neptun-fcm.herokuapp.com/api/rules";
-
-
+    private static final String postRegisterUserUrl = "https://neptun-fcm.herokuapp.com/admin/api/users/register";
+    private static final String postTestResultUserUrl = "https://neptun-fcm.herokuapp.com/admin/api/users/UID/results/";
+    
     public static String getQuestion(String questionCode){
         String question = null;
         try {
@@ -131,6 +134,20 @@ public class DataController {
             return result;
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    	
+    	return null;
+    }
+    
+    public static String postRegisterUser(String username, String password) {
+    	
+    	try {
+            RestTemplate restTemplate = new RestTemplate();
+            //TODO: implement that method
+            return null;
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     	

@@ -98,9 +98,9 @@ public class ButtonCircleController {
 				StatisticsController.setIsPEtest(true);
 				buttonCircleModel.setStartTime(System.currentTimeMillis());
 				Timer timer = buttonCircleView.getTimer();
+				timer.setDelay(1); //TH: is it necessary?
 				timer.addActionListener(new ActionListener() {
 			        public void actionPerformed(ActionEvent e) {
-			        	timer.setDelay(1);
 			        	long time = System.currentTimeMillis() - buttonCircleModel.getStartTime();
 			        	StatisticsController.setActTimeTmp(time);
 			        	StatisticsController.setTime(time);
