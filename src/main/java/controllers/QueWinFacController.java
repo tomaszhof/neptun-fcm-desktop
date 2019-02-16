@@ -91,23 +91,15 @@ public class QueWinFacController {
     }
 
     private void nextQuestion(){
+//        DataController.postTestResultUserAfter();
+        AnsweredQuestions.printAll();
         answCode = AnsweredQuestions.getQuestionAnswer(queCode);
         updateQueCode();
         System.out.println("Ans code: " + answCode);
         showWindow();
     }
-
-
-
+    
     private void preTest(){
         JFrame infFieldPre = new InformationFieldPreTest(questionWindowFactory);
-
-//        ((InformationFieldPreTest) infFieldPre).nextBtn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if(((InformationFieldPreTest) infFieldPre).getIsAvailableToNext())
-//                    //runTest();
-//            }
-//        });
     }
 }

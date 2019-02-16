@@ -1,8 +1,10 @@
 package views;
 
+import controllers.DataController;
 import controllers.QueWinFacController;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +18,8 @@ public class LoginView extends JFrame{
     GridBagConstraints c = new GridBagConstraints();
 
     JLabel nrTextField = new JLabel("Podaj numer użytkownika");
-    JTextField loginField = new JTextField("");
+    JTextField loginField = new JTextField("Login");
+    JTextField passwordField = new JTextField("Hasło");
     JButton nextBtn = new JButton("Dalej");
     JButton genLoginNumbBtn = new JButton("Nie posiadam numeru do logowania");
 
@@ -31,16 +34,26 @@ public class LoginView extends JFrame{
         panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setLocationRelativeTo(null); //do wyswiatlanie po srodu ekranu
 
+        loginField.setPreferredSize(new Dimension(200, 50));
+        loginField.setSize(200, 50);
+        passwordField.setPreferredSize(new Dimension(200, 50));
+        passwordField.setSize(200, 50);
+
+
         loginNrPanel.setLayout(new BorderLayout());
 
         nrTextField.setHorizontalAlignment(SwingConstants.CENTER);
         loginField.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordField.setHorizontalAlignment(SwingConstants.CENTER);
 
         loginNrPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_START);
         loginNrPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_END);
-        loginNrPanel.add(nrTextField, BorderLayout.NORTH);
-        loginNrPanel.add(loginField, BorderLayout.CENTER);
-        loginNrPanel.setBorder(BorderFactory.createEmptyBorder(80, 0,80,0));
+        loginNrPanel.add(nrTextField, BorderLayout.PAGE_START);
+
+        loginNrPanel.add(loginField, BorderLayout.LINE_START);
+        loginNrPanel.add(passwordField, BorderLayout.LINE_END);
+
+        loginNrPanel.setBorder(BorderFactory.createEmptyBorder(50, 0,10,0));
 
         buttonsPanel.add(genLoginNumbBtn);
         buttonsPanel.add(nextBtn);
@@ -64,14 +77,22 @@ public class LoginView extends JFrame{
     }
 
     void onNextBtnClick(){
-        //pociągnięcie z bazy informacji o aktualnym użytkowniku
-        panel.setVisible(false);
-        QueWinFacController queWinFacController = new QueWinFacController(2);
-        //int userNumber = Integer.parseInt(loginField.getText());
+        DataController.setIsFirstPhaseStart(false);
 
+        //pociągnięcie z bazy informacji o aktualnym użytkowniku
+        String tmp = DataController.postLoginUser(loginField.getText(), passwordField.getText());
+        if(tmp == null || tmp.equals("NoTlOgEd")){
+            nrTextField.setText("Nieprawidłowy login lub hasło");
+        }
+        else{
+            panel.setVisible(false);
+            QueWinFacController queWinFacController = new QueWinFacController(2);
+        }
     }
 
     void onGenBtnClick(){
+        DataController.setIsFirstPhaseStart(true);
+
         panel.setVisible(false);
         QueWinFacController queWinFacController = new QueWinFacController();
     }

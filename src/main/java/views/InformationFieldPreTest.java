@@ -1,6 +1,7 @@
 package views;
 
 import controllers.ButtonCircleController;
+import controllers.DataController;
 import controllers.QueWinFacController;
 import controllers.StatisticsController;
 import models.ButtonCircleModel;
@@ -33,6 +34,9 @@ public class InformationFieldPreTest extends JFrame {
 
 
     public InformationFieldPreTest(QuestionWindowFactory QWF){
+        if(DataController.isIsFirstPhaseStart())
+            DataController.postTestResultUserBefore();
+
         this.QWF = QWF;
         QWF.hide();
         nrTextField.setText(convertToMultiline(textToShow));

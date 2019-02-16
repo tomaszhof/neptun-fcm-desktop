@@ -111,7 +111,7 @@ public class QuestionWindowFactory extends JFrame {
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	answeredQuestions.clear(); //usun odpowiedzi przed przejsciem do kolejnego pytania
+            	answeredQuestions = new ArrayList<>();
             }
         });
 
@@ -225,7 +225,7 @@ public class QuestionWindowFactory extends JFrame {
                     public void itemStateChanged(ItemEvent e) {
                     	AnswerCheckBox selectedAnswer = (AnswerCheckBox) e.getSource();
                         if(e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                            System.out.println(questionCode + " " + selectedAnswer.getAnswerCode());
+                            System.out.println(questionCode + " ::: " + selectedAnswer.getAnswerCode());
                             answeredQuestions.add(selectedAnswer.getAnswerCode());
                             AnsweredQuestions.addAnswer(questionCode, answeredQuestions);
 

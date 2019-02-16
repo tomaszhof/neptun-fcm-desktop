@@ -1,9 +1,11 @@
 package views;
 
+import controllers.DataController;
 import controllers.StatisticsController;
 import data.Texts;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -89,6 +91,7 @@ public class InformationFieldPostTest extends JFrame {
 
     void onMakeTestAgainBtn(){
         InformationFieldPreTest informationFieldPreTest = new InformationFieldPreTest(QWF);
+        DataController.postTestResultUserAfter();
         panel.setVisible(false);
     }
 

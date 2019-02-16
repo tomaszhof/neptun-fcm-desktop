@@ -12,17 +12,22 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
 public class DataController {
-    //    private static final String importer = "https://neptun-fcm.herokuapp.com/importer";
+    private static String userNum;
+    private static boolean isFirstPhaseStart;
     private static final String getQuestionsUrl = "https://neptun-fcm.herokuapp.com/api/questions";
     private static final String getQueAnsCodeUrl = "https://neptun-fcm.herokuapp.com/api/question/";
     private static final String getAnswersUrl = "https://neptun-fcm.herokuapp.com/api/answers";
+    private static final String getAnswerUrl = "https://neptun-fcm.herokuapp.com/api/answer/";
     private static final String getRulesUrl = "https://neptun-fcm.herokuapp.com/api/rules";
     private static final String postRegisterUserUrl = "https://neptun-fcm.herokuapp.com/admin/api/users/register";
     private static final String postTestResultUserUrl = "https://neptun-fcm.herokuapp.com/admin/api/users/UID/results/";
+    private static final String postLogin = "https://neptun-fcm.herokuapp.com/api/users/login";
 
     public static String getQuestion(String questionCode) {
         String question = null;
@@ -40,7 +45,7 @@ public class DataController {
             //wyciaganie pytania
             question = rootobj.get(questionCode.toUpperCase()).getAsString(); //just grab the zipcode
             //Set<String> tmp = rootobj.keySet();
-            System.out.println(question);
+            //System.out.println(question);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,29 +53,24 @@ public class DataController {
         return question;
     }
 
-    public static String getAnswer(String answerCode) {
-        String answer = null;
-
+    public static String getAnswer(String answerCode){
         try {
-            //połączenie z URL'em do pobierania pytań
-            URL url = new URL(getAnswersUrl);
-            URLConnection request = url.openConnection();
-            request.connect();
+            RestTemplate restTemplate = new RestTemplate();
+            String URL = getAnswerUrl + answerCode;
 
-            // Convert to a JSON object to print data
-            JsonParser jp = new JsonParser(); //from gson
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
-            JsonObject rootobj = root.getAsJsonObject(); //May be an array, may be an object.
+            Object response = restTemplate.getForObject(URL, String.class);
+            String[] tmp = response.toString().split("\":\"");
+            String resp = tmp[1].replace("\"", "");
+            resp = resp.replace("}", "");
 
-            //wyciaganie pytania
+            //System.out.println(resp);
 
-            answer = rootobj.get(answerCode).toString(); //just grab the answer
+            return resp;
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return "A0";
         }
-        return answer;
+        return null;
     }
 
     public static Set<String> getAllQueId() {
@@ -96,7 +96,7 @@ public class DataController {
 
     public static String getQueAnsCodes(String questionCode) {
         String queAnsCodes = null;
-        System.out.println(questionCode);
+        //System.out.println(questionCode);
 
         questionCode = questionCode.toUpperCase();
         try {
@@ -113,7 +113,7 @@ public class DataController {
             //wyciaganie pytania
             queAnsCodes = rootobj.get(questionCode.toUpperCase()).toString(); //just grab the question
             //Set<String> tmp = rootobj.keySet();
-            System.out.println(queAnsCodes);
+            //System.out.println(queAnsCodes);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,6 +147,7 @@ public class DataController {
         try {
             RestTemplate restTemplate = new RestTemplate();
             //TODO: implement that method
+
             return null;
 
         } catch (Exception e) {
@@ -156,18 +157,31 @@ public class DataController {
         return null;
     }
 
-    public static void postTestResultUser(int UID) {
+    public static String postLoginUser(String username, String password) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
+            parts.add("username", username);
+            parts.add("password", password);
+
+            Object response = restTemplate.postForObject(postLogin, parts, String.class);
+            System.out.println(response.toString());
+            userNum = response.toString();
+            return response.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void postTestResultUserBefore() {
         String query_url = postTestResultUserUrl;
-        query_url = query_url.replace("UID",  Integer.toString(UID));
-        String json = "{\n" +
-                "\t\"beforeAnswers\":\"beforeAnswer4\",\n" +
-                "\t\"afterAnswers\":\"afeterAnswer4\",\n" +
-                "\t\"shortestPath\":504,\n" +
-                "\t\"realPath\":304,\n" +
-                "\t\"deviation\":64,\n" +
-                "\t\"maxDeviation\":124,\n" +
-                "\t\"integralU\":14\n" +
-                "}";
+
+        userNum = "292";
+        query_url = query_url.replace("UID",  Integer.toString(292));
+        String json = StatisticsController.getStatisticsJsonBefore();
+
         try {
             URL url = new URL(query_url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -193,5 +207,60 @@ public class DataController {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public static void postTestResultUserAfter() {
+        String query_url = postTestResultUserUrl;
+
+        userNum = "292";
+        query_url = query_url.replace("UID",  Integer.toString(292));
+        String json = StatisticsController.getStatisticsJsonAfter();
+
+        try {
+            URL url = new URL(query_url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(50000);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestMethod("POST");
+            OutputStream os = conn.getOutputStream();
+            os.write(json.getBytes("UTF-8"));
+            os.close();
+            // read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            String result = IOUtils.toString(in, "UTF-8");
+            System.out.println(result);
+            System.out.println("result after Reading JSON Response");
+            JSONObject myResponse = new JSONObject(result);
+//            System.out.println("jsonrpc- "+myResponse.getString("jsonrpc"));
+            System.out.println("id- " + myResponse.getInt("id"));
+            System.out.println("result- " + myResponse.getString("result"));
+            in.close();
+            conn.disconnect();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void postTestResult(int UID) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
+
+            Object response = restTemplate.postForObject(postLogin, parts, String.class);
+            System.out.println(response.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isIsFirstPhaseStart() {
+        return isFirstPhaseStart;
+    }
+
+    public static void setIsFirstPhaseStart(boolean isFirstPhaseStart) {
+        DataController.isFirstPhaseStart = isFirstPhaseStart;
     }
 }

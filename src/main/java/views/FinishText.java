@@ -1,5 +1,6 @@
 package views;
 
+import controllers.DataController;
 import data.Texts;
 
 import javax.swing.*;
@@ -25,6 +26,7 @@ public class FinishText extends JFrame {
 
 
     public FinishText(QuestionWindowFactory QWF){
+        DataController.postTestResultUserAfter();
         this.QWF = QWF;
         QWF.hide();
         TextField.setText(convertToMultiline(Texts.textFinish));

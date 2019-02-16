@@ -1,34 +1,36 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnsweredQuestions {
-    static ArrayList<AQ> answeredQuestions = new ArrayList();
+    private static List<AQ> answeredQuestions = new ArrayList<>();
 
     public static void addAnswer(String question, ArrayList<String> answers){
-        boolean contains = false;
+        printAll();
 
-        //jezeli zawiera, to w petli się skonczy
-        for (AQ data : answeredQuestions){
-            if (data.getQuestion().equals(question)){
-                data.setAnswers(answers);
-                return;
-            }
+        if(!contains(question)){
+            answeredQuestions.add(new AQ(question, answers));
         }
-
-        //jezeli nie zawiera, to wykona sie to
-        answeredQuestions.add(new AQ(question, answers));
-
-        System.out.println(question + " " + answeredQuestions.get(0).getFirstAnswer());
     }
 
-    public static ArrayList<AQ> getAnsweredQuestions() {
+    public static List<AQ> getAnsweredQuestions() {
         return answeredQuestions;
     }
 
     static void setAnsweredQuestions(ArrayList<AQ> answeredQuestions) {
         AnsweredQuestions.answeredQuestions = answeredQuestions;
     }
+
+    private static boolean contains(String questionCode){
+        for(AQ data : answeredQuestions){
+            if(data.getQuestion().equals(questionCode)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     static void displayElement(int i){
         String tmp = answeredQuestions.get(i).getFirstAnswer();
@@ -45,22 +47,31 @@ public class AnsweredQuestions {
     }
 
     public static void printAll(){
+        System.out.println("\n--------\n");
         for(AQ data : answeredQuestions)
-            System.out.println(data.getQuestion() + " " + data.answers.toString());
+            System.out.println(data.getQuestion() + " " + data.getAnswers().toString());
+        System.out.println("\n--------\n");
     }
+
+    public static String getString(){
+        String tmp = "";
+        for(AQ data : answeredQuestions)
+            tmp += "(" + data.getQuestion() + " " + data.getAnswers().toString() + ")";
+        return tmp;
+    }
+
 }
 
 class AQ{
-    String question;
-    public ArrayList<String> answers = new ArrayList<>();
-
-    public void setAnswers(ArrayList<String> answers) {
-        this.answers = answers;
-    }
-
+    private String question;
+    private ArrayList<String> answers;
 
     AQ(String question, ArrayList<String> answers){
         this.question = question;
+        this.answers = answers;
+    }
+
+    public void setAnswers(ArrayList<String> answers) {
         this.answers = answers;
     }
 
@@ -72,7 +83,9 @@ class AQ{
         return question;
     }
 
-
+    public ArrayList<String> getAnswers() {
+        return answers;
+    }
 }
 
 

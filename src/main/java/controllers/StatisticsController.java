@@ -1,5 +1,7 @@
 package controllers;
 
+import data.AnsweredQuestions;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ public class StatisticsController {
         nodePairs = new ArrayList<>();
         shortestPathSum = 0;
     }
-
 
     public static void addNode(String name, int xCenter, int yCenter){
         nodes.add(new Node(name, xCenter, yCenter));
@@ -246,8 +247,30 @@ public class StatisticsController {
                 + "Średnie maksymalne odchylenie: " + (int)getAverageMaxDeviation() + " px\n\n"
                 + "Średni współczynnik U: " + (int)getAverageU() + "\n\n"
                 + "Poszczególne współczynniki: \n" + getAllU();
+    }
 
+    public static String getStatisticsJsonBefore(){
+        return "{\n" +
+                "\t\"beforeAnswers\":\""+ AnsweredQuestions.getString() +"\",\n" +
+                "\t\"afterAnswers\":\"" + null + "\",\n" +
+                "\t\"shortestPath\":" + getShortestPathSum() + ",\n" +
+                "\t\"realPath\":" + (long) getRealPathSum() + ",\n" +
+                "\t\"deviation\":" + (long) getAverageDeviation() + ",\n" +
+                "\t\"maxDeviation\":" + (long) getAverageMaxDeviation()+ ",\n" +
+                "\t\"integralU\":"+ (long) getAverageU() +"\n" +
+                "}";
+    }
 
+    public static String getStatisticsJsonAfter(){
+        return "{\n" +
+                "\t\"beforeAnswers\":\""+ null +"\",\n" +
+                "\t\"afterAnswers\":\"" + AnsweredQuestions.getString() + "\",\n" +
+                "\t\"shortestPath\":" + getShortestPathSum() + ",\n" +
+                "\t\"realPath\":" + (long) getRealPathSum() + ",\n" +
+                "\t\"deviation\":" + (long) getAverageDeviation() + ",\n" +
+                "\t\"maxDeviation\":" + (long) getAverageMaxDeviation()+ ",\n" +
+                "\t\"integralU\":"+ (long) getAverageU() +"\n" +
+                "}";
     }
 
     private static String getAllU(){
