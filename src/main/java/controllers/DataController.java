@@ -25,9 +25,9 @@ public class DataController {
     private static final String getAnswersUrl = "https://neptun-fcm.herokuapp.com/api/answers";
     private static final String getAnswerUrl = "https://neptun-fcm.herokuapp.com/api/answer/";
     private static final String getRulesUrl = "https://neptun-fcm.herokuapp.com/api/rules";
-    private static final String postRegisterUserUrl = "https://neptun-fcm.herokuapp.com/admin/api/users/register";
+    private static final String postRegisterUserUrl = "https://neptun-fcm.herokuapp.com/api/users/register";
     private static final String postTestResultUserUrl = "https://neptun-fcm.herokuapp.com/admin/api/users/UID/results/";
-    private static final String postLogin = "https://neptun-fcm.herokuapp.com/api/users/login";
+    private static final String postLoginUrl = "https://neptun-fcm.herokuapp.com/api/users/login";
 
     public static String getQuestion(String questionCode) {
         String question = null;
@@ -147,8 +147,14 @@ public class DataController {
         try {
             RestTemplate restTemplate = new RestTemplate();
             //TODO: implement that method
+            MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
+            parts.add("username", username);
+            parts.add("password", password);
 
-            return null;
+            Object response = restTemplate.postForObject(postRegisterUserUrl, parts, String.class);
+            System.out.println("Response: " + response.toString());
+            userNum = response.toString();
+            return response.toString();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,7 +170,7 @@ public class DataController {
             parts.add("username", username);
             parts.add("password", password);
 
-            Object response = restTemplate.postForObject(postLogin, parts, String.class);
+            Object response = restTemplate.postForObject(postLoginUrl, parts, String.class);
             System.out.println(response.toString());
             userNum = response.toString();
             return response.toString();
@@ -178,8 +184,7 @@ public class DataController {
     public static void postTestResultUserBefore() {
         String query_url = postTestResultUserUrl;
 
-        userNum = "292";
-        query_url = query_url.replace("UID",  Integer.toString(292));
+        query_url = query_url.replace("UID",  userNum);
         String json = StatisticsController.getStatisticsJsonBefore();
 
         try {
@@ -212,8 +217,7 @@ public class DataController {
     public static void postTestResultUserAfter() {
         String query_url = postTestResultUserUrl;
 
-        userNum = "292";
-        query_url = query_url.replace("UID",  Integer.toString(292));
+        query_url = query_url.replace("UID",  userNum);
         String json = StatisticsController.getStatisticsJsonAfter();
 
         try {
@@ -248,7 +252,7 @@ public class DataController {
             RestTemplate restTemplate = new RestTemplate();
             MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
 
-            Object response = restTemplate.postForObject(postLogin, parts, String.class);
+            Object response = restTemplate.postForObject(postLoginUrl, parts, String.class);
             System.out.println(response.toString());
 
         } catch (Exception e) {

@@ -98,7 +98,7 @@ public class QueWinFacController {
         System.out.println("Ans code: " + answCode);
         showWindow();
     }
-    
+
     private void preTest(){
         JFrame infFieldPre = new InformationFieldPreTest(questionWindowFactory);
     }

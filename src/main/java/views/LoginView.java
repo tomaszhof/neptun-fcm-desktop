@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginView extends JFrame{
+    private boolean register = false;
+
     JFrame panel = new JFrame();
     JPanel loginNrPanel = new JPanel();
     JPanel buttonsPanel = new JPanel();
@@ -17,7 +19,7 @@ public class LoginView extends JFrame{
 
     GridBagConstraints c = new GridBagConstraints();
 
-    JLabel nrTextField = new JLabel("Podaj numer użytkownika");
+    JLabel nrTextField = new JLabel("Podaj login i hasło, aby się zalogować");
     JTextField loginField = new JTextField("Login");
     JTextField passwordField = new JTextField("Hasło");
     JButton nextBtn = new JButton("Dalej");
@@ -91,9 +93,22 @@ public class LoginView extends JFrame{
     }
 
     void onGenBtnClick(){
-        DataController.setIsFirstPhaseStart(true);
+        if(!register){
+            DataController.setIsFirstPhaseStart(true);
+            nrTextField.setText("Podaj login i haslo, aby się zarejestrować");
+            genLoginNumbBtn.setText("Zarejestruj");
+            register = true;
+        }
+        else {
 
-        panel.setVisible(false);
-        QueWinFacController queWinFacController = new QueWinFacController();
+            String result = DataController.postRegisterUser(loginField.getText(), passwordField.getText());
+            if(!result.equals("cannot create user")){
+                panel.setVisible(false);
+                QueWinFacController queWinFacController = new QueWinFacController();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Taki użytkownik już istnieje, podaj inny login");
+            }
+        }
     }
 }
