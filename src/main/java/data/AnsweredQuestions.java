@@ -56,8 +56,13 @@ public class AnsweredQuestions {
     public static String getString(){
         String tmp = "";
         for(AQ data : answeredQuestions)
-            tmp += "(" + data.getQuestion() + " " + data.getAnswers().toString() + ")";
+            tmp += "(" + data.getQuestion() + ":" + data.getAnswers().toString() + ")";
         return tmp;
+    }
+
+    public static void clearAnswers(){
+        System.out.println("Cleared");
+        answeredQuestions = new ArrayList<>();
     }
 
 }

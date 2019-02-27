@@ -251,20 +251,29 @@ public class StatisticsController {
 
     public static String getStatisticsJsonBefore(){
         return "{\n" +
-                "\t\"beforeAnswers\":\""+ AnsweredQuestions.getString() +"\",\n" +
-                "\t\"afterAnswers\":\"" + null + "\",\n" +
-                "\t\"shortestPath\":" + getShortestPathSum() + ",\n" +
-                "\t\"realPath\":" + (long) getRealPathSum() + ",\n" +
-                "\t\"deviation\":" + (long) getAverageDeviation() + ",\n" +
-                "\t\"maxDeviation\":" + (long) getAverageMaxDeviation()+ ",\n" +
-                "\t\"integralU\":"+ (long) getAverageU() +"\n" +
+                "\t\"beforeAnswers\":\""+ AnsweredQuestions.getString() + "\",\n" +
+                "\t\"shortestPath\":" + 0 + ",\n" +
+                "\t\"realPath\":" + 0 + ",\n" +
+                "\t\"deviation\":" + 0 + ",\n" +
+                "\t\"maxDeviation\":" + 0 + ",\n" +
+                "\t\"integralU\":"+ 0 +"\n" +
                 "}";
     }
 
     public static String getStatisticsJsonAfter(){
         return "{\n" +
-                "\t\"beforeAnswers\":\""+ null +"\",\n" +
                 "\t\"afterAnswers\":\"" + AnsweredQuestions.getString() + "\",\n" +
+                "\t\"shortestPath\":" + 0 + ",\n" +
+                "\t\"realPath\":" + 0 + ",\n" +
+                "\t\"deviation\":" + 0 + ",\n" +
+                "\t\"maxDeviation\":" + 0 + ",\n" +
+                "\t\"integralU\":"+ 0 +"\n" +
+                "}";
+    }
+
+    public static String getStatisticsTestJson(){
+        return "{\n" +
+//                "\t\"afterAnswers\":\"" + AnsweredQuestions.getString() + "\",\n" +
                 "\t\"shortestPath\":" + getShortestPathSum() + ",\n" +
                 "\t\"realPath\":" + (long) getRealPathSum() + ",\n" +
                 "\t\"deviation\":" + (long) getAverageDeviation() + ",\n" +
@@ -281,7 +290,7 @@ public class StatisticsController {
         return toReturn;
     }
 
-    private static double getAverageU(){
+    public static double getAverageU(){
         int counter = 0;
         double Usum = 0;
         for(NodePair pair : nodePairs){

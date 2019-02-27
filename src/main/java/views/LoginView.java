@@ -84,7 +84,7 @@ public class LoginView extends JFrame{
         //pociągnięcie z bazy informacji o aktualnym użytkowniku
         String tmp = DataController.postLoginUser(loginField.getText(), passwordField.getText());
         if(tmp == null || tmp.equals("NoTlOgEd")){
-            nrTextField.setText("Nieprawidłowy login lub hasło");
+            JOptionPane.showMessageDialog(null, "Nieprawidłowy login lub hasło.");
         }
         else{
             panel.setVisible(false);
@@ -96,6 +96,7 @@ public class LoginView extends JFrame{
         if(!register){
             DataController.setIsFirstPhaseStart(true);
             nrTextField.setText("Podaj login i haslo, aby się zarejestrować");
+            JOptionPane.showMessageDialog(null, "Podaj login i haslo, aby się zarejestrować.");
             genLoginNumbBtn.setText("Zarejestruj");
             register = true;
         }
@@ -107,7 +108,7 @@ public class LoginView extends JFrame{
                 QueWinFacController queWinFacController = new QueWinFacController();
             }
             else {
-                JOptionPane.showMessageDialog(null, "Taki użytkownik już istnieje, podaj inny login");
+                JOptionPane.showMessageDialog(null, "Taki użytkownik już istnieje, podaj inny login.");
             }
         }
     }

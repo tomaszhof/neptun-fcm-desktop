@@ -10,8 +10,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Set;
 
+import data.AnsweredQuestions;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -234,7 +237,44 @@ public class DataController {
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             String result = IOUtils.toString(in, "UTF-8");
+            System.out.println("RESPONSE:");
             System.out.println(result);
+
+            System.out.println("result after Reading JSON Response");
+            JSONObject myResponse = new JSONObject(result);
+//            System.out.println("jsonrpc- "+myResponse.getString("jsonrpc"));
+            System.out.println("id- " + myResponse.getInt("id"));
+            System.out.println("result- " + myResponse.getString("result"));
+            in.close();
+            conn.disconnect();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void postTestResultUserTest() {
+        String query_url = postTestResultUserUrl;
+
+        query_url = query_url.replace("UID",  userNum);
+        String json = StatisticsController.getStatisticsTestJson();
+
+        try {
+            URL url = new URL(query_url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(50000);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestMethod("POST");
+            OutputStream os = conn.getOutputStream();
+            os.write(json.getBytes("UTF-8"));
+            os.close();
+            // read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            String result = IOUtils.toString(in, "UTF-8");
+            System.out.println("RESPONSE:");
+            System.out.println(result);
+
             System.out.println("result after Reading JSON Response");
             JSONObject myResponse = new JSONObject(result);
 //            System.out.println("jsonrpc- "+myResponse.getString("jsonrpc"));

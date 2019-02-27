@@ -97,6 +97,13 @@ public class QueWinFacController {
         updateQueCode();
         System.out.println("Ans code: " + answCode);
         showWindow();
+
+        if(phaseNum == 2){
+            DataController.postTestResultUserAfter();
+        }
+        if(phaseNum == 1){
+            DataController.postTestResultUserBefore();
+        }
     }
 
     private void preTest(){

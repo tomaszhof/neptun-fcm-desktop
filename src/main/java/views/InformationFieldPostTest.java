@@ -81,6 +81,7 @@ public class InformationFieldPostTest extends JFrame {
         if(!isAvailableToNext){
             nrTextField.setText(convertToMultiline(Texts.textToShow3));
             nextBtn.setText("Przejdź do oceny interakcji");
+            DataController.postTestResultUserTest();
             isAvailableToNext = true;
         }
         else{
@@ -91,7 +92,7 @@ public class InformationFieldPostTest extends JFrame {
 
     void onMakeTestAgainBtn(){
         InformationFieldPreTest informationFieldPreTest = new InformationFieldPreTest(QWF);
-        DataController.postTestResultUserAfter();
+        DataController.postTestResultUserTest();
         panel.setVisible(false);
     }
 

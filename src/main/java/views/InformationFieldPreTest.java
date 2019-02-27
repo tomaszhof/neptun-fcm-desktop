@@ -4,6 +4,7 @@ import controllers.ButtonCircleController;
 import controllers.DataController;
 import controllers.QueWinFacController;
 import controllers.StatisticsController;
+import data.AnsweredQuestions;
 import models.ButtonCircleModel;
 
 import javax.swing.*;
@@ -34,6 +35,8 @@ public class InformationFieldPreTest extends JFrame {
 
 
     public InformationFieldPreTest(QuestionWindowFactory QWF){
+        AnsweredQuestions.clearAnswers();
+
         if(DataController.isIsFirstPhaseStart())
             DataController.postTestResultUserBefore();
 
