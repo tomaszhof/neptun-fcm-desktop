@@ -1,6 +1,8 @@
 package controllers;
 
+import com.google.gson.Gson;
 import data.AnsweredQuestions;
+import data.TestResult;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -249,37 +251,61 @@ public class StatisticsController {
                 + "Poszczególne współczynniki: \n" + getAllU();
     }
 
-    public static String getStatisticsJsonBefore(){
-        return "{\n" +
-                "\t\"beforeAnswers\":\""+ AnsweredQuestions.getString() + "\",\n" +
-                "\t\"shortestPath\":" + 0 + ",\n" +
-                "\t\"realPath\":" + 0 + ",\n" +
-                "\t\"deviation\":" + 0 + ",\n" +
-                "\t\"maxDeviation\":" + 0 + ",\n" +
-                "\t\"integralU\":"+ 0 +"\n" +
-                "}";
+    public static String getStatisticsJsonBefore() {
+        TestResult testResult = new TestResult();
+
+        testResult.setBeforeAnswers(AnsweredQuestions.getString());
+
+        Gson gson = new Gson();
+        String json = gson.toJson(testResult);
+        System.out.println(json);
+
+        return json;
     }
 
     public static String getStatisticsJsonAfter(){
-        return "{\n" +
-                "\t\"afterAnswers\":\"" + AnsweredQuestions.getString() + "\",\n" +
-                "\t\"shortestPath\":" + 0 + ",\n" +
-                "\t\"realPath\":" + 0 + ",\n" +
-                "\t\"deviation\":" + 0 + ",\n" +
-                "\t\"maxDeviation\":" + 0 + ",\n" +
-                "\t\"integralU\":"+ 0 +"\n" +
-                "}";
+        TestResult testResult = new TestResult();
+
+        testResult.setAfterAnswers(AnsweredQuestions.getString());
+
+        Gson gson = new Gson();
+        String json = gson.toJson(testResult);
+        System.out.println(json);
+
+        return json;
     }
 
+    public static String getStatisticsJsonAfter2(){
+        TestResult testResult = new TestResult();
+        String tmp = "(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])" +
+                "(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])" +
+                "(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])(Q18:[A93, A210, A92, A90, A89, A91])(Q19:[A211, A96, A95, A94])(Q20:[A212, A99])(Q21:[A213, A104, A103, A102])(Q22:[A108])";
+        System.out.println(tmp.length());
+
+        testResult.setAfterAnswers(tmp);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(testResult);
+        System.out.println(json);
+
+        return json;
+    }
+
+
     public static String getStatisticsTestJson(){
-        return "{\n" +
-//                "\t\"afterAnswers\":\"" + AnsweredQuestions.getString() + "\",\n" +
-                "\t\"shortestPath\":" + getShortestPathSum() + ",\n" +
-                "\t\"realPath\":" + (long) getRealPathSum() + ",\n" +
-                "\t\"deviation\":" + (long) getAverageDeviation() + ",\n" +
-                "\t\"maxDeviation\":" + (long) getAverageMaxDeviation()+ ",\n" +
-                "\t\"integralU\":"+ (long) getAverageU() +"\n" +
-                "}";
+        TestResult testResult = new TestResult();
+
+        testResult.setShortestPath((long) getShortestPathSum());
+        testResult.setRealPath((long) getRealPathSum());
+        testResult.setDeviation((long) getAverageDeviation());
+        testResult.setMaxDeviation((long) getAverageMaxDeviation());
+        testResult.setIntegralU((long) getAverageU());
+
+        Gson gson = new Gson();
+        String json = gson.toJson(testResult);
+        System.out.println(json);
+
+        return json;
     }
 
     private static String getAllU(){

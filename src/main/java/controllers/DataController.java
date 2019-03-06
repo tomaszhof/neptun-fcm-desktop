@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -11,10 +12,13 @@ import java.net.URLConnection;
 import java.util.Set;
 
 import data.AnsweredQuestions;
+import data.TestResult;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -60,6 +64,7 @@ public class DataController {
         try {
             RestTemplate restTemplate = new RestTemplate();
             String URL = getAnswerUrl + answerCode;
+            System.out.println("GET ANS: " + answerCode);
 
             Object response = restTemplate.getForObject(URL, String.class);
             String[] tmp = response.toString().split("\":\"");
@@ -217,11 +222,14 @@ public class DataController {
         }
     }
 
+
+
     public static void postTestResultUserAfter() {
         String query_url = postTestResultUserUrl;
 
         query_url = query_url.replace("UID",  userNum);
         String json = StatisticsController.getStatisticsJsonAfter();
+//        String json = getJSONAfter();
 
         try {
             URL url = new URL(query_url);
@@ -238,18 +246,48 @@ public class DataController {
             InputStream in = new BufferedInputStream(conn.getInputStream());
             String result = IOUtils.toString(in, "UTF-8");
             System.out.println("RESPONSE:");
-            System.out.println(result);
+            System.out.println("res: " + result);
 
-            System.out.println("result after Reading JSON Response");
-            JSONObject myResponse = new JSONObject(result);
+
+//            System.out.println("result after Reading JSON Response");
+//            JSONObject myResponse = new JSONObject(result);
 //            System.out.println("jsonrpc- "+myResponse.getString("jsonrpc"));
-            System.out.println("id- " + myResponse.getInt("id"));
-            System.out.println("result- " + myResponse.getString("result"));
+//            System.out.println("id- " + myResponse.getInt("id"));
+//            System.out.println("result- " + myResponse.getString("result"));
             in.close();
             conn.disconnect();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Exception dupaaa...");
+            System.out.println(e.getMessage());
+//            postTestResultUserAfter();
         }
+    }
+
+    public static void postTestResultUserAfter2() {
+        String query_url = postTestResultUserUrl;
+
+        query_url = query_url.replace("UID",  "1");
+        String json = StatisticsController.getStatisticsJsonAfter2();
+//        String json = getJSONAfter();
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(query_url, entity, String.class);
+            System.out.println(response);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+
+
     }
 
     public static void postTestResultUserTest() {
