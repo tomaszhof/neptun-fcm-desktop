@@ -82,6 +82,7 @@ public class QuestionWindowFactory extends JFrame {
 
         //ustawianie pytania
         String question = DataController.getQuestion(questionCode); //pytanie
+
         questionText.setText(question); //ustawia pole tekstowe na pytanie
 
         answersPanel.revalidate();

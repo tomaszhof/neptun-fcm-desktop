@@ -1,6 +1,5 @@
 package controllers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -11,8 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Set;
 
-import data.AnsweredQuestions;
-import data.TestResult;
+import data.QAs;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -35,32 +33,15 @@ public class DataController {
     private static final String postRegisterUserUrl = "https://neptun-fcm.herokuapp.com/api/users/register";
     private static final String postTestResultUserUrl = "https://neptun-fcm.herokuapp.com/admin/api/users/UID/results/";
     private static final String postLoginUrl = "https://neptun-fcm.herokuapp.com/api/users/login";
+    private static final String getAllQAa = "https://neptun-fcm.herokuapp.com/api/code";
+
+    public static QAs qAs;
 
     public static String getQuestion(String questionCode) {
-        String question = null;
-        try {
-            //połączenie z URL'em do pobierania pytań
-            URL url = new URL(getQuestionsUrl);
-            URLConnection request = url.openConnection();
-            request.connect();
-
-            // Convert to a JSON object to print data
-            JsonParser jp = new JsonParser(); //from gson
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
-            JsonObject rootobj = root.getAsJsonObject(); //May be an array, may be an object.
-
-            //wyciaganie pytania
-            question = rootobj.get(questionCode.toUpperCase()).getAsString(); //just grab the zipcode
-            //Set<String> tmp = rootobj.keySet();
-            //System.out.println(question);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return question;
+        return qAs.getQuestion(questionCode);
     }
 
-    public static String getAnswer(String answerCode){
+    public static String getAnswer2(String answerCode){
         try {
             RestTemplate restTemplate = new RestTemplate();
             String URL = getAnswerUrl + answerCode;
@@ -81,52 +62,13 @@ public class DataController {
         return null;
     }
 
-    public static Set<String> getAllQueId() {
-        Set<String> ids = null;
-        try {
-            //połączenie z URL'em do pobierania pytań
-            URL url = new URL(getQuestionsUrl);
-            URLConnection request = url.openConnection();
-            request.connect();
-
-            // Convert to a JSON object to print data
-            JsonParser jp = new JsonParser(); //from gson
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
-            JsonObject rootobj = root.getAsJsonObject(); //May be an array, may be an object.
-
-            ids = rootobj.keySet();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ids;
+    public static String getAnswer(String answerCode){
+        return qAs.getAnswer(answerCode);
     }
 
+
     public static String getQueAnsCodes(String questionCode) {
-        String queAnsCodes = null;
-        //System.out.println(questionCode);
-
-        questionCode = questionCode.toUpperCase();
-        try {
-            //połączenie z URL'em do pobierania pytań
-            URL url = new URL(getQueAnsCodeUrl + questionCode);
-            URLConnection request = url.openConnection();
-            request.connect();
-
-            // Convert to a JSON object to print data
-            JsonParser jp = new JsonParser(); //from gson
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
-            JsonObject rootobj = root.getAsJsonObject(); //May be an array, may be an object.
-
-            //wyciaganie pytania
-            queAnsCodes = rootobj.get(questionCode.toUpperCase()).toString(); //just grab the question
-            //Set<String> tmp = rootobj.keySet();
-            //System.out.println(queAnsCodes);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return queAnsCodes;
+        return qAs.getQueAnsCode(questionCode);
     }
 
     public static String getRulesOfQuestions() {
@@ -222,6 +164,23 @@ public class DataController {
         }
     }
 
+    public static QAs getAllQAs(){
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            QAs response = restTemplate.getForObject(getAllQAa, QAs.class);
+
+            // setting local static questions and answers
+            qAs = response;
+
+            return response;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
     public static void postTestResultUserAfter() {
@@ -285,9 +244,6 @@ public class DataController {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
-
-
     }
 
     public static void postTestResultUserTest() {

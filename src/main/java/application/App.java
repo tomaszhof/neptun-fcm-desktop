@@ -1,11 +1,7 @@
 package application;
 
-import controllers.DataController;
 import controllers.NeptunQAController;
 import controllers.QueWinFacController;
-import data.Question;
-import data.QuestionController;
-import views.*;
 
 public class App {
     //komentarz tylko po to, żeby wprowadzić zmiany i sprawdzić czy jestem contributor'em
