@@ -3,10 +3,6 @@ package application;
 import controllers.DataController;
 import views.*;
 
-import javax.swing.*;
-import javax.xml.crypto.Data;
-
-
 public class App2 {
 	public static void main(String[] args) {
 
@@ -20,10 +16,7 @@ public class App2 {
 
 		loadingPanel.hide();
 
-
-
 		LoginView loginView = new LoginView();
-
 
 		System.setProperty("file.encoding", currentEncoding);
 	   }
