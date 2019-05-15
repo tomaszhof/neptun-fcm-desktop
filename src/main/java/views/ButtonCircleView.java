@@ -101,6 +101,7 @@ public class ButtonCircleView extends JPanel {
     	     lastY = e.getY();
     	    }
       });
+
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.getContentPane().add(this);
       frame.pack();

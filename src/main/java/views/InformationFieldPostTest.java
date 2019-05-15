@@ -91,9 +91,9 @@ public class InformationFieldPostTest extends JFrame {
     }
 
     void onMakeTestAgainBtn(){
+        panel.setVisible(false);
         InformationFieldPreTest informationFieldPreTest = new InformationFieldPreTest(QWF);
         DataController.postTestResultUserTest();
-        panel.setVisible(false);
     }
 
     public static String convertToMultiline(String orig)

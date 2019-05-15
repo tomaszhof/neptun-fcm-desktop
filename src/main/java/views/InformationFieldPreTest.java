@@ -33,10 +33,10 @@ public class InformationFieldPreTest extends JFrame {
 
     Dimension screenSize;
 
+    static boolean isFitsTestRunning = false;
+
 
     public InformationFieldPreTest(QuestionWindowFactory QWF){
-        AnsweredQuestions.clearAnswers();
-
         if(DataController.isIsFirstPhaseStart())
             DataController.postTestResultUserBefore();
 
@@ -84,6 +84,7 @@ public class InformationFieldPreTest extends JFrame {
     void onNextBtnClick(){
         //pociągnięcie z bazy informacji o aktualnym użytkowniku
         if(isAvailableToNext){
+            isFitsTestRunning = true;
             QWF.unhide();
             runTest();
         }

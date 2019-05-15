@@ -76,8 +76,9 @@ public class QueWinFacController {
 
             if (queCode.equals("_")){
                 System.out.println("Finish");
-                AnsweredQuestions.printAll();
+//                AnsweredQuestions.printAll();
 
+                FinishText finishText = new FinishText(questionWindowFactory);
                 return;
                 //tu sie konczy
             }
@@ -87,6 +88,7 @@ public class QueWinFacController {
             phaseNum = 2;
             queCode = "_";
             updateQueCode();
+            AnsweredQuestions.clearAnswers();
         }
     }
 

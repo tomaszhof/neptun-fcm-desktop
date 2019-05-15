@@ -21,7 +21,7 @@ public class LoginView extends JFrame{
 
     JLabel nrTextField = new JLabel("Podaj login i hasło, aby się zalogować");
     JTextField loginField = new JTextField("Login");
-    JTextField passwordField = new JTextField("Hasło");
+    JPasswordField passwordField = new JPasswordField("haslo");
     JButton nextBtn = new JButton("Dalej");
     JButton genLoginNumbBtn = new JButton("Nie posiadam numeru do logowania");
 

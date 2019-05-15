@@ -34,6 +34,7 @@ public class ButtonCircleController {
 		buttonCircleModel = model;
 		buttonCircleView = view;
 		this.QWF = QWF;
+//		buttonCircleView.getButtons().forEach(btn -> {if (btn.getText().equals("0")) btn.setBackground(Color.RED);});
 		QWF.hide();
 	}
 
@@ -74,8 +75,13 @@ public class ButtonCircleController {
 	
 	private void onButtonClick(Object object) {
 		String id = "" + buttonCircleModel.getNextButtonId();
+
+
 		RoundButton button = (RoundButton) object;
 		if(id.equals(button.getText())) {
+
+//			turnNextDotRed(id);
+
 			button.setBackground(Color.CYAN);
 			buttonCircleModel.setNextButtonId();
 			// pomiar realnej sciezki cz.1 - ustawianie aktualnego przycisku
@@ -104,12 +110,21 @@ public class ButtonCircleController {
 			        	long time = System.currentTimeMillis() - buttonCircleModel.getStartTime();
 			        	StatisticsController.setActTimeTmp(time);
 			        	StatisticsController.setTime(time);
-						System.out.println(time);
+//						System.out.println(time);
 			            buttonCircleView.setLabel(""+time);
 			        }
 			    });
 				timer.start();
 			}
 		}
+	}
+
+	private void turnNextDotRed(String id){
+		int nextId = Integer.parseInt(id) + 1;
+		System.out.println(nextId);
+		buttonCircleView.getButtons().forEach(btn -> {
+			if(btn.getText().equals(Integer.toString(nextId)))
+				btn.setBackground(Color.RED);
+		});
 	}
 }
