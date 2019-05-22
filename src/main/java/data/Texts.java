@@ -21,7 +21,7 @@ public class Texts {
             "\n" +
             "Po zakończeniu testu wyświetli się okno z wynikami testu. Wyniki testu należy zapisać lub zapamiętać w celu oceny interakcji.\n";
 
-    public static final String nextBtnText2 = "Przejdź do testu";
+    public static final String nextBtnText2 = "Test dla urządzeń wskazujących (myszka itp.)";
 
     public static final String textToShow3 = "W celu wykonania testu 2 wyloguj się lub zminimalizuj okno dialogowe aplikacji oraz pobierz bezpłatną aplikację Klavaro-2.00c i zainstaluj ją.\n" +
             "\n" +

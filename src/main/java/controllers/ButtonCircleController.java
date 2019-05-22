@@ -3,6 +3,8 @@ package controllers;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class ButtonCircleController {
 	private ButtonCircleModel buttonCircleModel;
 	private ButtonCircleView buttonCircleView;
 	private QuestionWindowFactory QWF;
+	private boolean isTouchScreen = false;
+	private boolean isNextButtonRedEnabled;
 
 	public ButtonCircleController() {
 		
@@ -65,11 +69,44 @@ public class ButtonCircleController {
 		List<RoundButton> buttons = buttonCircleView.getButtons();
 		for(int i = 0; i < buttons.size(); i++) {
 			RoundButton button = buttons.get(i);
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent actionEvent) {
-					onButtonClick(actionEvent.getSource());
-				}
-	        });
+
+			if(!isTouchScreen){
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent actionEvent) {
+						onButtonClick(actionEvent.getSource());
+					}
+				});
+			}
+			// dla ekranow dotykowych wylaczone jest klikanie na przyciski
+			else {
+				button.addMouseListener(new MouseListener() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						onButtonClick(e.getSource());
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+
+					}
+				});
+			}
+
 		}
 	}
 	
@@ -80,7 +117,9 @@ public class ButtonCircleController {
 		RoundButton button = (RoundButton) object;
 		if(id.equals(button.getText())) {
 
-//			turnNextDotRed(id);
+			if(isNextButtonRedEnabled){
+				turnNextDotRed(id);
+			}
 
 			button.setBackground(Color.CYAN);
 			buttonCircleModel.setNextButtonId();
@@ -126,5 +165,13 @@ public class ButtonCircleController {
 			if(btn.getText().equals(Integer.toString(nextId)))
 				btn.setBackground(Color.RED);
 		});
+	}
+
+	public void setTouchScreen(boolean touchScreen) {
+		isTouchScreen = touchScreen;
+	}
+
+	public void setNextButtonRedEnabled(boolean nextButtonRedEnabled) {
+		isNextButtonRedEnabled = nextButtonRedEnabled;
 	}
 }

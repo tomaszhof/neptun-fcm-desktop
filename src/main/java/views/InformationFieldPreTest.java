@@ -23,13 +23,15 @@ public class InformationFieldPreTest extends JFrame {
     JPanel buttonsPanel = new JPanel();
     QuestionWindowFactory QWF;
 
-
     GridBagConstraints c = new GridBagConstraints();
 
     JLabel nrTextField = new JLabel();
 
     public JButton nextBtn = new JButton("Dalej");
+    public JButton nextTouchScreenBtn = new JButton("Test dla panelu dotykowego");
     public JButton skitpBtn = new JButton("Pomiń test");
+
+    private JCheckBox isRedBtnEnabledCheckBox = new JCheckBox("Następny przycisk czerwony");
 
     Dimension screenSize;
 
@@ -53,7 +55,6 @@ public class InformationFieldPreTest extends JFrame {
         infromPanel.setLayout(new BorderLayout());
 
         nrTextField.setHorizontalAlignment(SwingConstants.CENTER);
-
 
         infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_START);
         infromPanel.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.LINE_END);
@@ -79,22 +80,41 @@ public class InformationFieldPreTest extends JFrame {
                 onNextBtnClick();
             }
         });
+
+        nextTouchScreenBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onNextTouchScreenBtnClick();
+            }
+        });
+
+
     }
 
     void onNextBtnClick(){
         //pociągnięcie z bazy informacji o aktualnym użytkowniku
         if(isAvailableToNext){
+
             isFitsTestRunning = true;
             QWF.unhide();
-            runTest();
+            runTest(false);
         }
         else{
+            // zmiana napisow dla przyciskow
             nrTextField.setText(convertToMultiline(textToShow2));
             nextBtn.setText(nextBtnText2);
+            buttonsPanel.add(nextTouchScreenBtn);
+            buttonsPanel.add(isRedBtnEnabledCheckBox);
             validate();
             repaint();
             isAvailableToNext = true;
         }
+    }
+
+    void onNextTouchScreenBtnClick(){
+        isFitsTestRunning = true;
+        QWF.unhide();
+        runTest(true);
     }
 
     void onSkipBtnClick(){
@@ -111,7 +131,7 @@ public class InformationFieldPreTest extends JFrame {
         return this.isAvailableToNext;
     }
 
-    private void runTest(){
+    private void runTest(boolean isTouchScreen){
         panel.setVisible(false);
         StatisticsController.reset();
         SwingUtilities.invokeLater(new Runnable() {
@@ -120,6 +140,10 @@ public class InformationFieldPreTest extends JFrame {
                 buttonCircleModel.generateRandomNodes(15);
                 ButtonCircleView buttonCircleView = new ButtonCircleView(buttonCircleModel.getNodeLabels());
                 ButtonCircleController buttonCircleController = new ButtonCircleController(buttonCircleModel, buttonCircleView, QWF);
+
+                buttonCircleController.setTouchScreen(isTouchScreen);
+                buttonCircleController.setNextButtonRedEnabled(isRedBtnEnabledCheckBox.isSelected());
+
                 buttonCircleController.initController();
                 //MainView mainView = new MainView();
             }
