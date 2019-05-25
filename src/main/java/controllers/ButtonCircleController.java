@@ -24,6 +24,8 @@ public class ButtonCircleController {
 	private QuestionWindowFactory QWF;
 	private boolean isTouchScreen = false;
 	private boolean isNextButtonRedEnabled;
+	StringBuilder resultsToSendViaMail = new StringBuilder();
+
 
 	public ButtonCircleController() {
 		
@@ -38,7 +40,9 @@ public class ButtonCircleController {
 		buttonCircleModel = model;
 		buttonCircleView = view;
 		this.QWF = QWF;
-//		buttonCircleView.getButtons().forEach(btn -> {if (btn.getText().equals("0")) btn.setBackground(Color.RED);});
+
+		buttonCircleView.getButtons().forEach(btn -> {if (btn.getText().equals("0")) btn.setBackground(Color.RED);});
+
 		QWF.hide();
 	}
 
@@ -87,7 +91,6 @@ public class ButtonCircleController {
 
 					@Override
 					public void mousePressed(MouseEvent e) {
-
 					}
 
 					@Override
@@ -113,7 +116,6 @@ public class ButtonCircleController {
 	private void onButtonClick(Object object) {
 		String id = "" + buttonCircleModel.getNextButtonId();
 
-
 		RoundButton button = (RoundButton) object;
 		if(id.equals(button.getText())) {
 
@@ -125,8 +127,7 @@ public class ButtonCircleController {
 			buttonCircleModel.setNextButtonId();
 			// pomiar realnej sciezki cz.1 - ustawianie aktualnego przycisku
 				StatisticsController.setActualNode(button.getText());
-			//
-			
+
 			String maxId = "" + (buttonCircleView.getButtons().size()-1);
 			if(maxId.equals(button.getText())) {
 				Timer timer = buttonCircleView.getTimer();
@@ -136,6 +137,13 @@ public class ButtonCircleController {
 				StatisticsController.calcAllU();
 
 				//po kliknieciu na maxID ponownie pokazuje okno z pytaniami
+
+				// to testow applikacja moze wysylac maila ze statystykami
+//				if(isTouchScreen){
+//					resultsToSendViaMail.append(StatisticsController.printDevioations());
+//					EmailController.sendMail("Ekran dotykowy", resultsToSendViaMail.toString());
+//				}
+
 				InformationFieldPostTest informationFieldPostTest = new InformationFieldPostTest(QWF);
 				buttonCircleView.hideGui();
 			}

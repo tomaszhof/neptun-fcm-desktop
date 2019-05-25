@@ -3,10 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -91,6 +88,8 @@ public class ButtonCircleView extends JPanel {
       //ButtonCircleView answersPanel = new ButtonCircleView();
       frame = new JFrame("PanelsOnCircle");
       //przenies do controllera
+      
+
       frame.addMouseMotionListener(new MouseMotionAdapter() {
     	  public void mouseMoved(MouseEvent e) {
     	     StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
@@ -100,6 +99,101 @@ public class ButtonCircleView extends JPanel {
     	     lastX = e.getX();
     	     lastY = e.getY();
     	    }
+      });
+
+      frame.addMouseListener(new MouseAdapter() {
+         @Override
+         public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseReleased(MouseEvent e) {
+            super.mouseReleased(e);
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseEntered(MouseEvent e) {
+            super.mouseEntered(e);
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseExited(MouseEvent e) {
+            super.mouseExited(e);
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseDragged(MouseEvent e) {
+            super.mouseDragged(e);
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseMoved(MouseEvent e) {
+            super.mouseMoved(e);
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+      });
+
+      frame.addMouseListener(new MouseListener() {
+         @Override
+         public void mouseClicked(MouseEvent e) {
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mousePressed(MouseEvent e) {
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseReleased(MouseEvent e) {
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseEntered(MouseEvent e) {
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
+
+         @Override
+         public void mouseExited(MouseEvent e) {
+            StatisticsController.makeCalculations(e.getX(), e.getY(), lastX, lastY);
+            lastX = e.getX();
+            lastY = e.getY();
+         }
       });
 
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -63,7 +63,7 @@
 			     </systemProperties>
 		        <archive>
 		          <manifest>
-		            <mainClass>application.App</mainClass>
+		            <mainClass>application.App2</mainClass>
 		          </manifest>
 		        </archive>
 		        <descriptorRefs>
@@ -118,6 +118,13 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
+		</dependency>
+
+		<!--	Sending emails library	-->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
 		</dependency>
 
 

@@ -96,10 +96,13 @@ public class StatisticsController {
         //l max odchylenia koniec
     }
 
-    public static void printDevioations(){
+    public static String printDevioations(){
+        StringBuilder toReturn = new StringBuilder();
         for(NodePair pair : nodePairs){
             System.out.println(pair.n1.name + ":" + pair.n2.name + "\n" + pair.devToString() + "\n\n");
+            toReturn.append(pair.n1.name + ":" + pair.n2.name + "\n" + pair.devToString() + "\n\n");
         }
+        return toReturn.toString();
     }
 
     static void displayRealPaths(){
